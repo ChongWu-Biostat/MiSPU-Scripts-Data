@@ -1,0 +1,837 @@
+cluster = pam(tip.dist, 20, diss = TRUE)#
+res.m = matrix(NA,20,1)#
+for(i in 1:20) {#
+    res.m[i,1] =sum(cluster$clustering==i)#
+}#
+res.m/856#
+min(res.m/856)
+tip.dist
+cluster = pam(tip.dist, 20, diss = TRUE)
+cluster
+?cluster
+## generate 25 objects, divided into 2 clusters.#
+x <- rbind(cbind(rnorm(10,0,0.5), rnorm(10,0,0.5)),#
+           cbind(rnorm(15,5,0.5), rnorm(15,5,0.5)))#
+pamx <- pam(x, 2)#
+pamx
+pam(daisy(x, metric = "manhattan"), 2, diss = TRUE)
+daisy
+?daisy
+class(daisy(x, metric = "manhattan"))
+class(tip.dist)
+daisy(x, metric = "manhattan")
+summary(daisy(x, metric = "manhattan"))
+daisy
+class(tip.dist) <- dissiCl
+data(agriculture)#
+## Example 1 in ref:#
+##  Dissimilarities using Euclidean metric and without standardization#
+d.agr <- daisy(agriculture, metric = "euclidean", stand = FALSE)#
+d.agr
+class(d.agr)
+pam
+d.agr
+summary(d.agr)
+daisy
+daisy2 <-function (x, metric = c("euclidean", "manhattan", "gower"), stand = FALSE,#
+type = list(), weights = rep.int(1, p))#
+{#
+    if (length(dx <- dim(x)) != 2 || !(is.data.frame(x) || is.numeric(x)))#
+    stop("x is not a dataframe or a numeric matrix.")#
+    n <- dx[1]#
+    p <- dx[2]#
+    varnms <- dimnames(x)[[2]]#
+    pColl <- function(n) paste(n, collapse = ", ")#
+    if (length(type)) {#
+        if (!is.list(type) || is.null(ntyp <- names(type)) ||#
+        any(ntyp == ""))#
+        stop(gettextf("invalid %s; must be named list", sQuote("type")))#
+        for (nt in ntyp) {#
+            cvec <- type[[nt]]#
+            ct <- paste0("type$", nt)#
+            if (is.character(cvec)) {#
+                if (!is.null(varnms) && !all(cvec %in% varnms))#
+                stop(gettextf("%s has invalid column names",#
+                ct))#
+            }#
+            else if (is.numeric(cvec)) {#
+                if (!all(1 <= cvec & cvec <= p))#
+                stop(gettextf("%s must be in 1:ncol(x)", ct))#
+            }#
+            else stop(gettextf("%s must contain column names or numbers",#
+            ct))#
+        }#
+        tA <- type$asymm#
+        tS <- type$symm#
+        if (!is.null(tA) || !is.null(tS)) {#
+            d.bin <- cbind(as.data.frame(x[, tA, drop = FALSE]),#
+            x[, tS, drop = FALSE])#
+            lenB <- sapply(lapply(d.bin, function(y) levels(as.factor(y))),#
+            length)#
+            if (any(lenB > 2))#
+            stop("at least one binary variable has more than 2 levels.")#
+            if (any(lenB < 2))#
+            warning("at least one binary variable has not 2 different levels.")#
+            if (any(is.f <- sapply(d.bin, is.factor)))#
+            d.bin[is.f] <- lapply(d.bin[is.f], function(f) as.integer(as.character(f)))#
+            if (!all(sapply(d.bin, function(y) is.logical(y) ||#
+            all(sort(unique(as.numeric(y[!is.na(y)]))) %in%#
+            0:1))))#
+            stop("at least one binary variable has values not in {0,1,NA}")#
+        }#
+    }#
+    if (is.data.frame(x)) {#
+        type2 <- sapply(x, data.class)#
+        x <- data.matrix(x)#
+    }#
+    else {#
+        type2 <- rep("numeric", p)#
+        names(type2) <- colnames(x)#
+    }#
+    if (length(type)) {#
+        tT <- type$ordratio#
+        tL <- type$logratio#
+        x[, names(type2[tT])] <- unclass(as.ordered(x[, names(type2[tT])]))#
+        x[, names(type2[tL])] <- log10(x[, names(type2[tL])])#
+        type2[tA] <- "A"#
+        type2[tS] <- "S"#
+        type2[tT] <- "T"#
+    }#
+    type2[tI <- type2 %in% c("numeric", "integer")] <- "I"#
+    if (n > 9 && any(tI) && any(iBin <- apply(x[, tI, drop = FALSE],#
+    2, function(v) length(table(v)) == 2)))#
+    warning(gettextf("binary variable(s) %s treated as interval scaled",#
+    pColl(which(tI)[iBin])))#
+    type2[type2 == "ordered"] <- "O"#
+    type2[type2 == "factor"] <- "N"#
+    if (any(ilog <- type2 == "logical")) {#
+        warning(sprintf(ngettext(sum(ilog), "setting 'logical' variable %s to type 'asymm'",#
+        "setting 'logical' variables %s to type 'asymm'"),#
+        pColl(which(ilog))), domain = NA)#
+        type2[ilog] <- "A"#
+    }#
+    all.I <- all(type2 == "I")#
+    if (all.I && {#
+        metric <- match.arg(metric)#
+        metric != "gower"#
+    }) {#
+        if (stand) {#
+            x <- scale(x, center = TRUE, scale = FALSE)#
+            sx <- colMeans(abs(x), na.rm = TRUE)#
+            if (0 %in% sx) {#
+                warning(gettextf("%s has constant columns %s; these are standardized to 0",#
+                sQuote("x"), pColl(which(sx == 0))))#
+                sx[sx == 0] <- 1#
+            }#
+            x <- scale(x, center = FALSE, scale = sx)#
+        }#
+        jdat <- 2L#
+        ndyst <- if (metric == "manhattan")#
+        2L#
+        else 1L#
+    }#
+    else {#
+        if (!missing(metric) && metric != "gower" && !all.I)#
+        warning("with mixed variables, metric \"gower\" is used automatically")#
+        colR <- apply(x, 2, range, na.rm = TRUE)#
+        colmin <- colR[1, ]#
+        sx <- colR[2, ] - colmin#
+        if (any(sx == 0))#
+        sx[sx == 0] <- 1#
+        x <- scale(x, center = colmin, scale = sx)#
+        jdat <- 1L#
+        ndyst <- 0L#
+        if (length(weights) == 1)#
+        weights <- rep.int(weights, p)#
+        else if (length(weights) != p)#
+        stop("'weights' must be of length p (or 1)")#
+    }#
+    typeCodes <- c("A", "S", "N", "O", "I", "T")#
+    type3 <- match(type2, typeCodes)#
+    if (any(ina <- is.na(type3)))#
+    stop(gettextf("invalid type %s for column numbers %s",#
+    type2[ina], pColl(which(is.na))))#
+    if ((mdata <- any(inax <- is.na(x)))) {#
+        jtmd <- integer(p)#
+        jtmd[apply(inax, 2L, any)] <- -1L#
+        valmisdat <- 1.1 * max(abs(range(x, na.rm = TRUE)))#
+        x[inax] <- valmisdat#
+    }#
+    storage.mode(x) <- "double"#
+    disv <- .Fortran(cl_daisy, n, p, x, if (mdata) rep(valmisdat,#
+    p) else double(1), as.double(weights), if (mdata) jtmd else integer(1),#
+    jdat, type3, ndyst, as.integer(mdata), dis = double((n *#
+    (n - 1))/2), NAOK = TRUE)$dis#
+    disv[disv == -1] <- NA#
+    full <- matrix(0, n, n)#
+    full[!lower.tri(full, diag = TRUE)] <- disv#
+    disv <- t(full)[lower.tri(full)]#
+    if (any(is.na(disv)))#
+    attr(disv, "NA.message") <- "NA-values in the dissimilarity matrix !"#
+    class(disv) <- dissiCl#
+    attr(disv, "Labels") <- dimnames(x)[[1]]#
+    attr(disv, "Size") <- n#
+    attr(disv, "Metric") <- if (!ndyst)#
+    "mixed"#
+    else metric#
+    if (!ndyst)#
+    attr(disv, "Types") <- typeCodes[type3]#
+    disv#
+}
+d.agr <- daisy2(agriculture, metric = "euclidean", stand = FALSE)#
+d.agr
+d.agr[1,1]
+d.agr(1,1)
+a.agrdissiCl
+dissiCl
+class(tip.dist)
+attributes(d.agr)
+dissiCl <- c("dissimilarity", "dist")#
+disv = tip.dist#
+class(disv) <- dissiCl # see ./0aaa.R
+attributes(tip.dist)
+attributes(disv)
+cluster = pam(disv, 20, diss = TRUE)#
+res.m = matrix(NA,20,1)#
+for(i in 1:20) {#
+    res.m[i,1] =sum(cluster$clustering==i)#
+}#
+res.m/856#
+min(res.m/856)
+cluster
+## generate 25 objects, divided into 2 clusters.#
+x <- rbind(cbind(rnorm(10,0,0.5), rnorm(10,0,0.5)),#
+           cbind(rnorm(15,5,0.5), rnorm(15,5,0.5)))#
+pamx <- pam(x, 2)#
+pamx
+disv
+d.agr
+dissiCl <- c("dissimilarity", "dist")#
+disv = tip.dist#
+class(disv) <- dissiCl # see ./0aaa.R#
+ attr(disv, "Metric") <- "euclidean"#
+class(tip.dist) <- dissiCl#
+cluster = pam(disv, 20, diss = TRUE)
+res.m = matrix(NA,20,1)#
+for(i in 1:20) {#
+    res.m[i,1] =sum(cluster$clustering==i)#
+}#
+res.m/856#
+min(res.m/856)
+cluster
+tip.dist = distTips(throat.tree, throat.tree$tip.label, method="patristic", useC=TRUE)#
+tip.dist.matrix =  as.matrix(tip.dist)
+tip.dist.matrix
+cluster = pam(tip.dist.matrix, 20, diss = TRUE)
+cluster
+res.m = matrix(NA,20,1)#
+for(i in 1:20) {#
+    res.m[i,1] =sum(cluster$clustering==i)#
+}#
+res.m/856#
+min(res.m/856)
+tip.dist.matrix
+rdirichlet<-function(n,alpha)#
+## generate n random deviates from the Dirichlet function with shape#
+## parameters alpha#
+{#
+    l<-length(alpha);#
+    x<-matrix(rgamma(l*n,alpha),ncol=l,byrow=TRUE);#
+    sm<-x%*%rep(1,l);#
+    x/as.vector(sm);#
+}
+setwd("/Users/chong/Google Drive/SWAK/simulation/codes/sim1")#
+#
+library(aSPU)#
+library("GUniFrac")#
+library("dirmult")#
+#library("DirichletReg")#
+library("adephylo")#
+library(reshape)#
+library(cluster)#
+source("GUniFrac.R")#
+source("swak.R")#
+#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+#
+################################################################################
+### Generate the data set  and set the parameters                         ######
+################################################################################
+set.seed(data.index)#
+data(throat.otu.tab)#
+data(throat.tree)#
+data(throat.meta)#
+#
+gamma = read.table("fitGamma.txt",sep =" ")#
+gamma = t(gamma)#
+pi <- rdirichlet(100,gamma)
+pi
+gamma
+D = matrix(1:9,3,3)
+D*D
+library(aSPU)#
+library("GUniFrac")#
+library("dirmult")#
+#library("DirichletReg")#
+library("adephylo")#
+library(reshape)#
+library(cluster)#
+source("GUniFrac.R")#
+source("swak.R")#
+#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+#
+################################################################################
+### Generate the data set  and set the parameters                         ######
+################################################################################
+set.seed(data.index)#
+data(throat.otu.tab)#
+data(throat.tree)#
+data(throat.meta)
+setwd("/Users/chong/Google Drive/SWAK/simulation/codes/sim1")
+X = throat.otu.tab
+dim(throat.otu.tab)
+Y = rbinom(60,1,0.5)
+Y
+tree = throat.tree
+pow=c(0:8)
+alpha = c(0, 0.5, 1)
+B=1000
+n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    if (class(X)!= "matrix") stop("X is not a matrix")#
+    if (nrow(X)!=n) stop("Dimensions of y and X do not match")#
+    m = ncol(X)#
+    res <- Y - mean(Y)#
+    ##observed statistics#
+    Ts=matrix(NA,length(pow),length(alpha)+1)
+X = as.matrix(X)
+n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    if (class(X)!= "matrix") stop("X is not a matrix")#
+    if (nrow(X)!=n) stop("Dimensions of y and X do not match")#
+    m = ncol(X)#
+    res <- Y - mean(Y)#
+    ##observed statistics#
+    Ts=matrix(NA,length(pow),length(alpha)+1)
+i = 1
+U = (Y-mean(Y))%*%X#
+        score.weight = abs(U)^pow[i]
+U
+pow[1]
+score.weight
+##
+	if (!is.rooted(tree)) stop("Rooted phylogenetic tree required!")
+score.weight.tmp = t(matrix(rep(score.weight,dim(otu.tab)[1]),dim(otu.tab)[2],dim(otu.tab)[1]))
+otu.tab = X
+score.weight.tmp = t(matrix(rep(score.weight,dim(otu.tab)[1]),dim(otu.tab)[2],dim(otu.tab)[1]))
+score.weight.tmp
+otu.tab
+otu.tab-otu.tab *score.weight.tmp
+sum(otu.tab-otu.tab *score.weight.tmp)
+U = (Y-mean(Y))%*%X#
+        score.weight = abs(U)^pow[i]#
+        GUniF = GUniFrac2(X, tree, score.weight,alpha)#
+        dw <- GUniF$unifracs[, , "d_1"] # Weighted UniFrac#
+        du <- GUniF$unifracs[, , "d_UW"] # Unweighted UniFrac#
+        d0 <- GUniF$unifracs[, , "d_0"]      # GUniFrac with alpha 0#
+        d5 <- GUniF$unifracs[, , "d_0.5"]    # GUn
+###############################################################
+##
+# GUniFrac: Generalized UniFrac distances for comparing microbial#
+#						communities. (Modified version)#
+# Chong Wu (wuxx0845@umn.edu)#
+##
+# The original version is contributed by#
+# Jun Chen (chenjun@mail.med.upenn.edu)#
+# Feb 24, 2012#
+##
+################################################################
+D2K     = function(D){#
+    n = NROW(D)#
+    centerM = diag(n) - 1/n#
+    K = -0.5*centerM %*% (D*D) %*% centerM#
+    eK= eigen(K, symmetric = T)#
+    # K = eK$vector %*% diag(abs(eK$values)) %*% t(eK$vector)#
+    K = eK$vector  %*% (t(eK$vector) * abs(eK$values))#
+    return(K)#
+}#
+rdirichlet<-function(n,alpha)#
+## generate n random deviates from the Dirichlet function with shape#
+## parameters alpha#
+{#
+    l<-length(alpha);#
+    x<-matrix(rgamma(l*n,alpha),ncol=l,byrow=TRUE);#
+    sm<-x%*%rep(1,l);#
+    x/as.vector(sm);#
+}#
+require(ade4)#
+require(ape)#
+require(vegan)#
+GUniFrac2 <- function (otu.tab, tree, score.weight, alpha = c(0, 0.5, 1)) {#
+	# Calculate Generalized UniFrac distances. Unweighted and #
+	# Variance-adjusted UniFrac distances will also be returned.#
+	#	#
+	# Args:#
+	#		otu.tab: OTU count table, row - n sample, column - q OTU#
+	#		tree: rooted phylogenetic tree of R class "phylo"#
+    #       score.weight: the score based weight for each OTU (variables)#
+	#		alpha: parameter controlling weight on abundant lineages#
+	##
+	# Returns:#
+	# 	unifracs: three dimensional array containing the generalized #
+	#							UniFrac distances, unweighted UniFrac distance and #
+	#							variance adjusted UniFrac distances. #
+	##
+	if (!is.rooted(tree)) stop("Rooted phylogenetic tree required!")#
+	# Convert into proportions#
+    # add the score based weight here; the remaining codes remain the same.#
+    score.weight.tmp = t(matrix(rep(score.weight,dim(otu.tab)[1]),dim(otu.tab)[2],dim(otu.tab)[1]))#
+	otu.tab <- as.matrix(otu.tab *score.weight.tmp )#
+	row.sum <- rowSums(otu.tab)#
+	otu.tab <- otu.tab / row.sum#
+	n <- nrow(otu.tab)#
+	# Construct the returning array#
+	if (is.null(rownames(otu.tab))) {#
+		rownames(otu.tab) <- paste("comm", 1:n, sep="_")#
+	}#
+	# d_UW: unweighted UniFrac, d_VAW: weighted UniFrac#
+	dimname3 <- c(paste("d", alpha, sep="_"), "d_UW", "d_VAW")#
+	unifracs <- array(NA, c(n, n, length(alpha) + 2),#
+				  dimnames=list(rownames(otu.tab), rownames(otu.tab), dimname3))#
+	for (i in 1:(length(alpha)+2)){#
+		for (j in 1:n){#
+			unifracs[j, j, i] <- 0#
+		}#
+	}	#
+	# Check OTU name consistency#
+	if (sum(!(colnames(otu.tab) %in% tree$tip.label)) != 0) {#
+		stop("The OTU table contains unknown OTUs! OTU names#
+					in the OTU table and the tree should match!" )#
+	}#
+	# Get the subtree if tree contains more OTUs#
+	absent <- tree$tip.label[!(tree$tip.label %in% colnames(otu.tab))]#
+	if (length(absent) != 0) {#
+		tree <- drop.tip(tree, absent)#
+		warning("The tree has more OTU than the OTU table!")#
+	}#
+	# Reorder the otu.tab matrix if the OTU orders are different#
+	tip.label <- tree$tip.label#
+	otu.tab <- otu.tab[, tip.label]#
+	ntip <- length(tip.label)#
+	nbr <- nrow(tree$edge)	#
+	edge <- tree$edge#
+	edge2 <- edge[, 2]#
+	br.len <- tree$edge.length#
+	#  Accumulate OTU proportions up the tree	#
+	cum <- matrix(0, nbr, n)							# Branch abundance matrix#
+	for (i in 1:ntip) {#
+		tip.loc <- which(edge2 == i)#
+		cum[tip.loc, ] <- cum[tip.loc, ] + otu.tab[, i]	#
+		node <- edge[tip.loc, 1]						# Assume the direction of edge #
+		node.loc <- which(edge2 == node)#
+		while (length(node.loc)) {#
+			cum[node.loc, ] <- cum[node.loc, ] + otu.tab[, i]		#
+			node <- edge[node.loc, 1]#
+			node.loc <- which(edge2 == node)#
+		}#
+	}#
+	# Calculate various UniFrac distances#
+	cum.ct <- round(t(t(cum) * row.sum)) 	# For VAW#
+	for (i in 2:n) {#
+		for (j in 1:(i-1)) {#
+			cum1 <- cum[, i]#
+			cum2 <- cum[, j]#
+			ind <- (cum1 + cum2) != 0#
+			cum1 <- cum1[ind]#
+			cum2 <- cum2[ind]		#
+			br.len2 <- br.len[ind]			#
+			mi <- cum.ct[ind, i] + cum.ct[ind, j]#
+			mt <- row.sum[i] + row.sum[j]			#
+			diff <- abs(cum1 - cum2) / (cum1 + cum2)		#
+			# Generalized UniFrac distance#
+			for(k in 1:length(alpha)){#
+				w <- br.len2 * (cum1 + cum2)^alpha[k]#
+				unifracs[i, j, k] <- unifracs[j, i, k] <- sum(diff * w) / sum(w)#
+			}			#
+			#	Variance Adjusted UniFrac Distance#
+            #ind2 <- (mt != mi)#
+            #w <- br.len2 * (cum1 + cum2) / sqrt(mi * (mt - mi))#
+            #unifracs[i, j, (k + 2)] <- unifracs[j, i, (k + 2)] <-#
+            #		sum(diff[ind2] * w[ind2]) / sum(w[ind2])#
+			#	Unweighted UniFrac Distance#
+			cum1 <- (cum1 != 0)#
+			cum2 <- (cum2 != 0)			#
+			unifracs[i, j, (k + 1)] <- unifracs[j, i, (k + 1)] <- #
+					sum(abs(cum1 - cum2) / (cum1 + cum2) * br.len2) / sum(br.len2)#
+		}#
+	}#
+	return(list(unifracs=unifracs))#
+}
+U = (Y-mean(Y))%*%X#
+        score.weight = abs(U)^pow[i]#
+        GUniF = GUniFrac2(X, tree, score.weight,alpha)#
+        dw <- GUniF$unifracs[, , "d_1"] # Weighted UniFrac#
+        du <- GUniF$unifracs[, , "d_UW"] # Unweighted UniFrac#
+        d0 <- GUniF$unifracs[, , "d_0"]      # GUniFrac with alpha 0#
+        d5 <- GUniF$unifracs[, , "d_0.5"]    # GUniFrac with alpha 0.5
+dw
+dw1 = D2K(dw)
+dw1
+dw1-dw
+dw
+dim(dw)
+n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    if (class(X)!= "matrix") stop("X is not a matrix")#
+    if (nrow(X)!=n) stop("Dimensions of y and X do not match")#
+    m = ncol(X)#
+    res <- Y - mean(Y)#
+    ##observed statistics#
+    Ts=matrix(NA,length(pow),length(alpha)+1)#
+    for (i in 1:length(pow)){#
+        U = (Y-mean(Y))%*%X#
+        score.weight = abs(U)^pow[i]#
+        GUniF = GUniFrac2(X, tree, score.weight,alpha)#
+        dw <- GUniF$unifracs[, , "d_1"] # Weighted UniFrac#
+        du <- GUniF$unifracs[, , "d_UW"] # Unweighted UniFrac#
+        d0 <- GUniF$unifracs[, , "d_0"]      # GUniFrac with alpha 0#
+        d5 <- GUniF$unifracs[, , "d_0.5"]    # GUniFrac with alpha 0.5#
+        ## transform the distance matrix to the kernel#
+        dw = D2K(dw)#
+        du = D2K(du)#
+        d0 = D2K(d0)#
+        d5 = D2K(d5)#
+#
+        Ts[i,1] = t((Y-mean(Y))) %*% dw %*% (Y-mean(Y))#
+        Ts[i,2] = t((Y-mean(Y))) %*% du %*% (Y-mean(Y))#
+        Ts[i,3] = t((Y-mean(Y))) %*% d0 %*% (Y-mean(Y))#
+        Ts[i,4] = t((Y-mean(Y))) %*% d5 %*% (Y-mean(Y))#
+    }
+B
+B = 10
+B = 5
+# permutations:#
+    T0s1 = matrix(0, nrow=B, ncol=length(pow))#
+    T0s2 = matrix(0, nrow=B, ncol=length(pow))#
+    T0s3 = matrix(0, nrow=B, ncol=length(pow))#
+    T0s4 = matrix(0, nrow=B, ncol=length(pow))#
+    for (b in 1:B){#
+        res0 <- sample(res, length(res))#
+        # test stat's:#
+        for(j in 1:length(pow)) {#
+            U = (res0)%*%X#
+            score.weight = abs(U)^pow[i]#
+            GUniF = GUniFrac2(X, tree, score.weight,alpha)#
+            dw <- GUniF$unifracs[, , "d_1"] # Weighted UniFrac#
+            du <- GUniF$unifracs[, , "d_UW"] # Unweighted UniFrac#
+            d0 <- GUniF$unifracs[, , "d_0"]      # GUniFrac with alpha 0#
+            d5 <- GUniF$unifracs[, , "d_0.5"]    # GUniFrac with alpha 0.5#
+            ## transform the distance matrix to the kernel#
+            dw = D2K(dw)#
+            du = D2K(du)#
+            d0 = D2K(d0)#
+            d5 = D2K(d5)#
+            T0s1[b, j] = t(res0) %*% dw %*% (res0)#
+            T0s2[b, j] = t(res0) %*% du %*% (res0)#
+            T0s3[b, j] = t(res0) %*% d0 %*% (res0)#
+            T0s4[b, j] = t(res0) %*% d5 %*% (res0)#
+        }#
+    }#
+    pPerm0 = matrix(NA,length(pow),length(alpha)+1)#
+    for(j in 1:length(pow)) {#
+        pPerm0[j,1] = sum( abs(Ts[j,1])<=abs(T0s1[(1:(B-1)),j]))/B # Weighted UniFrac#
+        pPerm0[j,2] = sum( abs(Ts[j,2])<=abs(T0s2[(1:(B-1)),j]))/B # Unweighted UniFrac#
+        pPerm0[j,3] = sum( abs(Ts[j,3])<=abs(T0s3[(1:(B-1)),j]))/B # GUniFrac with alpha 0#
+        pPerm0[j,4] = sum( abs(Ts[j,4])<=abs(T0s4[(1:(B-1)),j]))/B # GUniFrac with alpha 0.5#
+    }#
+    P0s1 = apply(T0s1, 2, function(x) (B-rank(abs(x))+1)/(B))#
+    minp01 = apply(P0s1, 1, min)#
+    Paspu1<-(sum(minp01<=min(pPerm0[,1]))+1)/(B+1)#
+    P0s2 = apply(T0s2, 2, function(x) (B-rank(abs(x))+1)/(B))#
+    minp02 = apply(P0s2, 1, min)#
+    Paspu2<-(sum(minp02<=min(pPerm0[,2]))+1)/(B+1)#
+    P0s3 = apply(T0s3, 2, function(x) (B-rank(abs(x))+1)/(B))#
+    minp03 = apply(P0s3, 1, min)#
+    Paspu3<-(sum(minp03<=min(pPerm0[,3]))+1)/(B+1)#
+    P0s4 = apply(T0s4, 2, function(x) (B-rank(abs(x))+1)/(B))#
+    minp04 = apply(P0s4, 1, min)#
+    Paspu4<-(sum(minp04<=min(pPerm0[,4]))+1)/(B+1)#
+    ## combined the results of different kernels#
+    res <- rbind(pPerm0, c(Paspu1,Paspu2,Paspu3,Paspu4))#
+    colnames(res) = c("Weighted","Unweighted","GUniFrac0","GUniFrac0.5")#
+    rownames(res) = c(pow,"a")
+Ts
+Ts = cbind(t(Ts[,1]),t(Ts[,4]))
+Ts
+T0s1
+T0s = cbind(T0s1,T0s2)
+T0s
+pPerm0 = rep(NA,dim(Ts)[2])
+pPerm0
+for(j in 1:dim(Ts)[2]) {#
+        pPerm0[j] = sum( abs(Ts[j])<=abs(T0s[(1:(B-1)),j]))/B#
+    }
+pPerm0
+Ts[j]
+abs(T0s[(1:(B-1)),j])
+abs(Ts[j])<=abs(T0s[(1:(B-1)),j])
+P0s = apply(T0s, 2, function(x) (B-rank(abs(x))+1)/(B))
+P0s
+minp0 = apply(P0s, 1, min)
+minp0
+min(pPerm0)
+(sum(minp0<=min(pPerm0))+1)/(B+1)
+require(graphics)#
+#
+loc <- cmdscale(eurodist)
+loc
+loc <- cmdscale(eurodist)#
+x <- loc[, 1]#
+y <- -loc[, 2] # reflect so North is at the top#
+## note asp = 1, to ensure Euclidean distances are represented correctly#
+plot(x, y, type = "n", xlab = "", ylab = "", asp = 1, axes = FALSE,#
+     main = "cmdscale(eurodist)")#
+text(x, y, rownames(loc), cex = 0.6)
+eurodist
+load("/Users/chong/Google Drive/SWAK/MiRKAT/MiRKAT/data/throat.meta.rda")
+ls
+ls()
+throat.meta
+throat.meta[1:5,]
+1/1000
+1/10000
+sqrt(0.001/10000)
+sqrt(0.001/1000)
+sqrt(0.001/10000)
+sqrt(0.0001/10000)
+1/(4*0.001^2)
+sqrt(0.002/10000)
+sqrt(0.002/20000)
+sqrt(0.002/50000)
+source("http://bioconductor.org/biocLite.R")
+biocLite("phyloseq")
+library(phyloseq)
+load("/Users/chong/Downloads/joey711-phyloseq-6eeb569/data/soilrep.RData")
+ls()
+soilrep
+load("/Users/chong/Downloads/joey711-phyloseq-6eeb569/data/GlobalPatterns.RData")
+ls()
+GlobalPatterns
+load("/Users/chong/Downloads/joey711-phyloseq-6eeb569/data/esophagus.RData")
+load("/Users/chong/Downloads/joey711-phyloseq-6eeb569/data/enterotype.RData")
+ls()
+enterotype
+esophagus
+data(enterotype)
+ig <- make_network(enterotype, "samples", max.dist=0.3)
+ig
+plot_network(ig, enterotype, color="SeqTech", shape="Enterotype", line_weight=0.3, label=NULL)
+data(GlobalPatterns)plot_richness(GlobalPatterns, x="SampleType", measures=c("Observed", "Chao1", "Shannon"))
+GlobalPatterns
+install.packages(phangorn)
+install.packages("phangorn")
+load("/Users/chong/Downloads/phangorn/data/chloroplast.RData")
+ls()
+chloroplast
+summary(chloroplast)
+load("/Users/chong/Downloads/phangorn/data/Laurasiatherian.RData")
+ls()
+Laurasiatherian
+load("/Users/chong/Google Drive/SWAK/MiRKAT/MiRKAT/build/vignette.rds")
+ls()
+load("/Users/chong/Google Drive/SWAK/MiRKAT/MiRKAT/build/vignette.rds")
+install.packages("combinat")
+require(combinat)#
+permn(3)#
+combn(3, 2)
+combn(100, 50)
+choose(100,50)
+choose(100,90)
+choose(100,95)
+choose(100,99)
+library(‘BiasedUrn’) #load (modified) package# Assume one has already scanned in required data set.# dis: array of disease outcomes (1 affected, 0 unaffected) for N subjects # z: covariate matrix of dimension N 3 Cn.case < - sum(dis) # number of cases
+library("BiasedUrn")#
+#
+n.subjects <- 600#
+n.permutations <- 1000
+? rMFNCHypergeo
+rMFNCHypergeo(n.permutations, m1, n.cases, disease.odds)
+library(XML)
+table <- readHTMLTable("http://genetics.emory.edu/labs/epstein/software/BiasedUrn/test.dat")
+table
+table <- readHTMLTable("http://genetics.emory.edu/labs/epstein/software/BiasedUrn/test.dat")
+table
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-resiudalPerm3/sim1/")#
+library(aSPU)#
+library("GUniFrac")#
+library("dirmult")#
+#library("DirichletReg")#
+library("adephylo")#
+library(reshape)#
+library(cluster)#
+library(BiasedUrn)#
+library(CompQuadForm)#
+library(MiRKAT)#
+source("GUniFrac.R")#
+source("MiRKAT_binary.R")#
+source("MiRKAT_support.R")#
+source("MiRKAT_continuous.R")#
+source("swak.R")#
+library(RcppArmadillo)#
+library(Rcpp)#
+sourceCpp("swak.cpp")
+set.seed(data.index)#
+data(throat.otu.tab)#
+data(throat.tree)#
+data(throat.meta)
+class(throat.otu.tab)
+tree = throat.tree
+class(tree)
+otu.tab = throat.otu.tab
+otu.tab
+class(tree)
+node.depth(tree, method = 1)
+? node.depth
+node.height(tree)
+node.depth(tree)
+tree
+plot.phylo(tree)
+?plot.phylo
+plot(tree, type = "c")
+?plot.phylo
+diag(vcv.phylo(tree))
+? vcv.phylo
+node.depth(tree, method = 1)
+res = node.depth(tree, method = 1)
+sort(res)
+res = node.depth(tree, method = 2)
+res
+sort(res)
+otu.tab
+dim(otu.tab)
+colSums(otu.tab)
+# Consider the noncentral hypogeometric permutation#
+rm(list = ls())#
+require(ade4)#
+require(vegan)#
+require(phangorn)#
+require(ape)#
+require(cluster)#
+require(dirmult)#
+library(MCMCpack)#
+library(GUniFrac)#
+data(throat.tree)#
+data(throat.otu.tab)
+install.packages(MCMCpack)
+install.packages("MCMCpack")
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-resiudalPerm4-7-4/Code2Wierzbicki/")#
+source("MiRKAT_Binary_JunDavies.R")#
+nClus = 20#
+depth = 1000#
+family = "binomial"#
+args=(commandArgs(TRUE))#
+nSam  =as.integer(args[[1]]) ##
+f = as.numeric(args[[2]]) # Fold change#
+a = as.integer(args[[3]]) # whether X and Z are correlated #
+s = 12#
+b = 0.5 # to control the X effect size 0.5 and 0, 0.25 #
+D2K     = function(D){#
+  n = NROW(D)#
+  centerM = diag(n) - 1/n#
+  K = -0.5*centerM %*% (D*D) %*% centerM#
+  eK= eigen(K, symmetric = T)#
+  # K = eK$vector %*% diag(abs(eK$values)) %*% t(eK$vector)#
+  K = eK$vector  %*% (t(eK$vector) * abs(eK$values))#
+  return(K)#
+}#
+getNaiveOmni = function(x){#
+  naivep = min(x)*length(x)#
+  naivep = ifelse(naivep > 1, 1, naivep)#
+  return(naivep)#
+}#
+dir.create("step2_Result")#
+outdir  = "step2_Result/s2.1"#
+dir.create(outdir)
+if (f == 0){#
+  n.sim = 5000#
+}else{#
+  n.sim = 2000#
+}#
+outfile = sprintf("%s/pvalues_sz%d_fold%s_cluster12_a%d_b%s.txt", outdir, nSam,f, s, a, as.character(b))
+f=0
+if (f == 0){#
+  n.sim = 5000#
+}else{#
+  n.sim = 2000#
+}#
+outfile = sprintf("%s/pvalues_sz%d_fold%s_cluster12_a%d_b%s.txt", outdir, nSam,f, s, a, as.character(b))
+nSam
+nSam
+f
+tree = throat.tree#
+# tree = midpoint(tree)#
+tree.dist <- cophenetic(tree)#
+obj <- pam(tree.dist, nClus)
+obj
+clustering <- obj$clustering
+otu.ids <- tree$tip.label
+otu.ids
+clustering
+load("DirMultOutput.RData")
+dd
+p.est = dd$pi#
+names(p.est) <- names(dd$pi)#
+theta <- dd$theta#
+gplus <- (1 - theta) / theta#
+p.est <- p.est[otu.ids]#
+g.est <- p.est * gplus#
+p.clus <- sort(tapply(p.est, clustering, sum), decr=T)#
+scale2 = function(x)as.numeric(scale(x))
+scale2
+p.clus
+dd
+gplus
+p.est
+p.clus
+nSam = 100
+comm <- matrix(0, nSam, length(g.est))#
+  rownames(comm) <- 1:nrow(comm)#
+  colnames(comm) <- names(g.est)#
+  # comm.p hold the underlying proportions#
+  comm.p <- comm#
+  nSeq <- rnbinom(nSam, mu = depth, size = 25)#
+  for (i in 1:nSam) {#
+    comm.p[i, ] <- rdirichlet(1, g.est)[1, ]#
+    comm[i, ] <- rmultinom(1, nSeq[i], prob=comm.p[i, ])[, 1]#
+  }
+s
+otu.ids <- names(which(clustering == s))
+otu.ids
+OTU = comm[, otu.ids]
+OTU
+colSums(OTU)
+nSeq
+g.est
+nSeq[1]
+nSeq
+rnbinom(nSam, mu = depth, size = 25)
+rnbinom(nSam, mu = depth, size = 25)
+?rbinom
+depth
+?rnbinom
+? rnbinom
+depth

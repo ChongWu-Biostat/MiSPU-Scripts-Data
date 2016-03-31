@@ -1,0 +1,1992 @@
+qnorm(1-0.9999)
+install_github("cran/NCBI2R")
+library(github)
+library(devtools)
+install_github("cran/NCBI2R")
+?qnorm
+5*200
+0.05*200
+##################################
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    out[1:r,2] = rmultinom(r, 2, prob = c(p0,p1,p2))#
+    out[(r+1):(r+s),2] = rmultinom(s, 2, prob = c(q0,q1,q2))#
+    out#
+}#
+index = 1#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+sim.data(index,r,s,k,lambda1,lamdab2,p)
+# out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)
+out
+rmultinom(r, 2, prob = c(p0,p1,p2))
+rmultinom(10, size = 12, prob = c(0.1,0.2,0.8))
+prob = c(p0,p1,p2)
+prob
+rmultinom(r, 2, prob = c(p0,p1,p2))
+rmultinom(r, 1, prob = c(p0,p1,p2))
+rmultinom(r, 2, prob = c(p0,p1,p2))
+rmultinom(r, 1, prob = c(p0,p1,p2))
+tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)
+case.gen
+# generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2
+case.gen
+##################################
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+index = 1#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+sim.data(index,r,s,k,lambda1,lamdab2,p)
+# out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)
+# generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)
+tmp
+case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen
+out
+tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2
+prob = c(q0,q1,q2)
+prob
+control.gen
+24*5
+24*5-5
+##################################
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+index = 1#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+data = sim.data(index,r,s,k,lambda1,lamdab2,p)
+data
+index = 1#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+## calculate the test static#
+weight = c(0,0,1)#
+#
+n = s + r#
+case.data = data[data[,1] ==1,]#
+control.data = data[data[,1]==0,]#
+#
+r0 = sum(case.data[,2]==0)#
+r1 = sum(case.data[,2]==1)#
+r2 = sum(case.data[,2]==2)#
+#
+n0 = sum(data[,2]==0)#
+n1 = sum(data[,2]==1)#
+n2 = sum(data[,2]==2)#
+U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)
+U
+(r2/r - n2/n)
+(r1/r - n1/n
+)
+(r0/r - n0/n)
+r0
+r1
+r2
+n0
+n1
+n2
+# calcualte the variance#
+phi = r/n#
+#
+p0 = r0 / r#
+p1 = r1 / r#
+p2 = r2 / r#
+#
+q0 = s0 / s#
+q1 = s1 / s#
+q2 = s2 / s#
+#
+Var.U1 = n/(r^2) * phi * (1 - phi)^2 * (weight[1]^2 * p0 + weight[2]^2 * p1 + weight[2]^2 * p2 - (weight[1] * p0 + weight[2] * p1 + weight[2] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[2]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[2] * q2)^2 )
+n = s + r#
+case.data = data[data[,1] ==1,]#
+control.data = data[data[,1]==0,]#
+#
+r0 = sum(case.data[,2]==0)#
+r1 = sum(case.data[,2]==1)#
+r2 = sum(case.data[,2]==2)#
+#
+s0 = sum(control.data[,2]==0)#
+s1 = sum(control.data[,2]==1)#
+s2 = sum(control.data[,2]==2)#
+#
+n0 = sum(data[,2]==0)#
+n1 = sum(data[,2]==1)#
+n2 = sum(data[,2]==2)#
+U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+# calcualte the variance#
+phi = r/n#
+#
+p0 = r0 / r#
+p1 = r1 / r#
+p2 = r2 / r#
+#
+q0 = s0 / s#
+q1 = s1 / s#
+q2 = s2 / s#
+#
+Var.U1 = n/(r^2) * phi * (1 - phi)^2 * (weight[1]^2 * p0 + weight[2]^2 * p1 + weight[2]^2 * p2 - (weight[1] * p0 + weight[2] * p1 + weight[2] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[2]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[2] * q2)^2 )
+Var.U1
+phi
+p0
+(weight[1]^2 * p0 + weight[2]^2 * p1 + weight[2]^2 * p2 - (weight[1] * p0 + weight[2] * p1 + weight[2] * p2)^2 )
+(weight[1]^2 * p0 + weight[2]^2 * p1 + weight[2]^2 * p2)
+p2
+weight
+Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )
+Var.U1
+p0 = q0 = n0/n#
+p1 = q1 = n1/n#
+p2 = q2 = n2/n#
+#
+Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )
+Var.U2
+Z1 = U/ sqrt(Var.U1)
+Z1
+qnorm(Z1)
+pnorm(Z1)
+pnorm(1.96)
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+calZ <- function(data, weight, index,r,s,k,lambda1,lamdab2,p) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)#
+}#
+#
+index = 1#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+## calculate the test static#
+weight = c(0,0,1)#
+calZ(data,weight,r,s,k,lambda1,lamdab2,p)
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+calZ <- function(data, weight, index,r,s,k,lambda1,lamdab2,p) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)#
+}#
+#
+index = 10#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+## calculate the test static#
+weight = c(0,0,1)#
+calZ(data,weight,r,s,k,lambda1,lamdab2,p)
+n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )
+Var.U1
+p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))
+c(Z1,Z2)
+data
+calZ(data,weight,r,s,k,lambda1,lamdab2,p)
+weight
+n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)
+calZ <- function(data, weight, r,s) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)#
+}
+calZ(data,weight,r,s)
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+calZ <- function(data, weight, r,s) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)#
+}#
+# 2 a)#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res = matrix(NA,1000,2)#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res[i, ] = calZ(data,weight,r,s)#
+}
+res
+sum(res[,1] > 1.96)
+res[,1]
+sum(res[,1] > 1.96,is.na = TRUE)
+?sum
+sum(res[,1] > 1.96,na.rm  = TRUE)
+43/1000
+index = 11
+data = sim.data(index,r,s,k,lambda1,lamdab2,p)
+calZ(data,weight,r,s)
+n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n
+U
+p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )
+Var.U1
+p0
+(weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2)
+p2
+q2
+p2
+p1
+p2
+n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r
+p0
+p1
+p2
+q0
+q1
+q2
+is.na(res[,1])
+sum(res[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res[,1]))
+sum(res[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res[,2]))
+res = matrix(NA,10000,2)#
+for (i in 1:10000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res[i, ] = calZ(data,weight,r,s)#
+}#
+#
+sum(res[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res[,1]))#
+sum(res[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res[,2]))
+r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)
+r0
+r1
+r2
+n0
+n1
+n2
+s0
+s1
+s2
+p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s
+p0
+p1
+p2
+q0
+q1
+q2
+r2
+n2
+r2
+r2 = sum(case.data[,2]==2)
+r2
+data
+control.data
+data
+data[,1]==0
+data[data[,1]==0,]
+control.data
+n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)
+n2
+s2
+s1
+sum(res[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res[,1]))#
+sum(res[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res[,2]))
+##################################
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+calZ <- function(data, weight, r,s) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)#
+}#
+# 2 a)#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = calZ(data,weight,r,s)#
+}
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.04369919#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.057#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))
+r = 250#
+s = 250#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = calZ(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049
+r = 500#
+s = 500#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = calZ(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.032#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.032
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.039#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.039
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.044#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.044
+ABT <- function(data, weight, r,s) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p.hat = (2* r2 + r1) / (2*r)#
+    q.hat = (2*s2 + s1) / (2*s)#
+    p.tilde =  (2 * n2 + n1 ) / (2 * n)#
+    Var1 = (1 / (2 * r) + 1 / (2 * s)) * p.tilde * (1 - p.tilde)#
+    Var2 = p.hat * (1 - p.hat) / (2 *r) + q.hat * (1 - q.hat) / (2 * s)#
+    # calculate the statistic#
+    Z1 = abs((p.hat - q.hat)/ sqrt(Var1))#
+    Z2 = abs((p.hat - q.hat)/ sqrt(Var2))#
+    #output#
+    c(Z1,Z2)#
+}#
+# 2 a)#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = ABT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = ABT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = ABT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1.1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = CAT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049
+##################################
+# By Chong Wu               ######
+# HW3 Stat Genetics         ######
+##################################
+#
+# 2#
+# generate the simulated data#
+sim.data <- function(index,r,s,k,lambda1,lamdab2,p) {#
+    # out put container#
+    set.seed(index)#
+    out = matrix(NA,(r+s),2)#
+    # generate the outcome status first#
+    out[1:r,1] = 1#
+    out[(r+1):(r+s),1] = 0#
+    # under HWE#
+    q = 1 - p#
+    g0 = q * q#
+    g1 = 2 * p * q#
+    g2 = p * p#
+    f0 = k/(g0 + lambda1 * g1 + lambda2 * g2)#
+    f1 = lambda1 * f0#
+    f2 = lambda2 * f0#
+    p0 = g0 * f0 /k#
+    p1 = g1 * f1 /k#
+    p2 = g2 * f2 /k#
+    q0 = g0 * (1 - f0) / (1 - k)#
+    q1 = g1 * (1 - f1) / (1 - k)#
+    q2 = g2 * (1 - f2) / (1 - k)#
+    # generate the geneotype#
+    tmp = rmultinom(r, 1, prob = c(p0,p1,p2))#
+    case.gen = matrix(0,r,1)#
+    case.gen[tmp[2,]==1,] = 1#
+    case.gen[tmp[3,]==1,] = 2#
+    out[1:r,2] = case.gen#
+    tmp = rmultinom(s, 1, prob = c(q0,q1,q2))#
+    control.gen = matrix(0,s,1)#
+    control.gen[tmp[2,]==1,] = 1#
+    control.gen[tmp[3,]==1,] = 2#
+    out[(r+1):(r+s),2] = control.gen#
+    out#
+}#
+CAT <- function(data, weight, r,s) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p0 = r0 / r#
+    p1 = r1 / r#
+    p2 = r2 / r#
+    q0 = s0 / s#
+    q1 = s1 / s#
+    q2 = s2 / s#
+    Var.U1 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    p0 = q0 = n0/n#
+    p1 = q1 = n1/n#
+    p2 = q2 = n2/n#
+    Var.U2 = n/(r^2) * phi * (1 - phi)^2 * ((weight[1]^2 * p0 + weight[2]^2 * p1 + weight[3]^2 * p2) - (weight[1] * p0 + weight[2] * p1 + weight[3] * p2)^2 ) +  n/(r^2) * phi^2 * (1 - phi) * (weight[1]^2 * q0 + weight[2]^2 * q1 + weight[3]^2 * q2 - (weight[1] * q0 + weight[2] * q1 + weight[3] * q2)^2 )#
+    # calculate the statistic#
+    Z1 = abs(U/ sqrt(Var.U1))#
+    Z2 = abs(U/ sqrt(Var.U2))#
+    #output#
+    c(Z1,Z2)#
+}#
+# 2 a)#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = CAT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049#
+#
+# 2 b#
+#
+# 2 a)#
+r = 250#
+s = 250#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = calZ(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.032#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.032#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.039#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.039#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.044#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.044#
+r = 500#
+s = 500#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = calZ(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = calZ(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.055#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.055#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.05#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.05#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.051#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.051#
+# 2 c#
+ABT <- function(data, weight, r,s) {#
+    n = s + r#
+    case.data = data[data[,1] ==1,]#
+    control.data = data[data[,1]==0,]#
+    r0 = sum(case.data[,2]==0)#
+    r1 = sum(case.data[,2]==1)#
+    r2 = sum(case.data[,2]==2)#
+    s0 = sum(control.data[,2]==0)#
+    s1 = sum(control.data[,2]==1)#
+    s2 = sum(control.data[,2]==2)#
+    n0 = sum(data[,2]==0)#
+    n1 = sum(data[,2]==1)#
+    n2 = sum(data[,2]==2)#
+    U = weight[1] * (r0/r - n0/n) + weight[2] * (r1/r - n1/n) + weight[3] * (r2/r - n2/n)#
+    # calcualte the variance#
+    phi = r/n#
+    p.hat = (2* r2 + r1) / (2*r)#
+    q.hat = (2*s2 + s1) / (2*s)#
+    p.tilde =  (2 * n2 + n1 ) / (2 * n)#
+    Var1 = (1 / (2 * r) + 1 / (2 * s)) * p.tilde * (1 - p.tilde)#
+    Var2 = p.hat * (1 - p.hat) / (2 *r) + q.hat * (1 - q.hat) / (2 * s)#
+    # calculate the statistic#
+    Z1 = abs((p.hat - q.hat)/ sqrt(Var1))#
+    Z2 = abs((p.hat - q.hat)/ sqrt(Var2))#
+    #output#
+    c(Z1,Z2)#
+}#
+# 2 a)#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = ABT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = ABT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = ABT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.053#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.054#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.053#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.054#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.054#
+#######################################
+# 2 d#
+# additive, MUL model weight = (0,0.5,1)#
+# dominant model weight = (0,1,1)#
+# recessive model weight = (0,0,1)#
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+lambda1 = lambda2 = 1.1#
+res1 = matrix(NA,1000,2)#
+res2 = matrix(NA,1000,2)#
+res3 = matrix(NA,1000,2)#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = CAT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+#
+lambda.choice = seq(1:4)#
+lambda1 = lambda2 = 4#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = CAT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+#
+lambda.choice = seq(1:4)#
+lambda1 = lambda2 = 5#
+#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = CAT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+# 0.04369919#
+sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+# 0.03963415#
+#
+#    weight = c(0,0.5,1)#
+sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+# 0.057#
+sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+# 0.053#
+#    weight = c(0,1,1)#
+sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+# 0.053#
+sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+# 0.049
+seq(1:4)
+?seq
+seq(1:4,length.out= 50)
+seq(from = 1, to = 4,by = 0.1)
+r = 50#
+s = 50#
+k = 0.1#
+p = 0.2#
+#
+lambda.choice = seq(from = 1, to = 4,by = 0.1)#
+final.res = matrix(NA,length(lambda.choice),6)#
+for(lambda.index in 1:length(lambda.choice)) {#
+    lambda1 = lambda2 = lambda.choice[lambda.index]#
+for (i in 1:1000) {#
+    index = i#
+    data = sim.data(index,r,s,k,lambda1,lamdab2,p)#
+    ## calculate the test static#
+    weight = c(0,0,1)#
+    res1[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,0.5,1)#
+    res2[i, ] = CAT(data,weight,r,s)#
+    weight = c(0,1,1)#
+    res3[i, ] = CAT(data,weight,r,s)#
+}#
+#
+#    weight = c(0,0,1)#
+final.res[lambda.index,1] = sum(res1[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,1]))#
+final.res[lambda.index,2] = sum(res1[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res1[,2]))#
+#
+#    weight = c(0,0.5,1)#
+final.res[lambda.index,3] = sum(res2[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,1]))#
+final.res[lambda.index,4] = sum(res2[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res2[,2]))#
+#    weight = c(0,1,1)#
+final.res[lambda.index,5] = sum(res3[,1] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,1]))#
+final.res[lambda.index,6] = sum(res3[,2] > 1.96,na.rm  = TRUE)/ sum(!is.na(res3[,2]))#
+}
+final.res
+library(ggplot2)#
+res = as.data.frame(matrix(NA,31* 6,3))#
+colnames(res) = c("pvalue","x","Methods")#
+plot.res = t(final.res)#
+res[,1] = c(plot.res)#
+res[,2] = rep(lambda.choice,each  = 6)#
+res[,3] = factor(rep(c("RECsep","RECcom","ADDsep","ADDcom","DOMcom","DOMsep"),times = 31),levels = c("RECsep","RECcom","ADDsep","ADDcom","DOMcom","DOMsep"))
+res
+## create the plot#
+base_size = 12#
+base_family = ""#
+p1 = ggplot(res, aes(x=x, y=pvalue,group = Methods, color = Methods,shape = Methods,linetype = Methods))+ scale_shape_manual(values=1:nlevels(res$Methods),breaks = levels(res$Methods),#
+labels = c("RECsep","RECcom","ADDsep","ADDcom","DOMcom","DOMsep")) +#
+labs(x=expression(paste("Effect ", lambda,sep="")), y="Power")+#
+geom_point(size = 2) + geom_line(lwd = 0.5) + scale_colour_discrete(breaks = levels(res$Methods),#
+labels = c("RECsep","RECcom","ADDsep","ADDcom","DOMcom","DOMsep"))+ scale_linetype_discrete(breaks = levels(res$Methods),#
+labels = c("RECsep","RECcom","ADDsep","ADDcom","DOMcom","DOMsep")) + guides(Methods = guide_legend(ncol = 6, byrow = TRUE)) +theme_grey(base_size = base_size, base_family = base_family) %+replace%#
+theme(legend.position=c(0.15, .6),legend.text.align = 0 ,axis.text = element_text(size = rel(0.8)), axis.ticks = element_line(colour = "black"),#
+legend.key = element_rect(colour = "grey80"), panel.background = element_rect(fill = "white",#
+colour = NA), panel.border = element_rect(fill = NA,#
+colour = "grey50"), panel.grid.major = element_line(colour = "grey90",#
+size = 0.2), panel.grid.minor = element_line(colour = "grey98",#
+size = 0.5), strip.background = element_rect(fill = "grey80",#
+colour = "grey50", size = 0.2))#
+p1
+library(mice)
+?mice
+simSeeds <- seed#
+    set.seed(simSeeds) ## Set the random seed for this simulation#
+    BETA.PROP <- 0.05#
+    BETA.NONZERO.MU <- 0.1#
+    BETA.NONZERO.SIG <- 0.025#
+    # Baseline proportion of cell types (e.g. T, B, mono, granulocyte)#
+    CELL.INTERCEPT <- c(0.2,0.1,0.1,0.6)  # Must sum to one#
+    # Cell mixture effect of slope#
+    CELL.SLOPE <- 0.5*c(0,-0.1,0.1,0) # must sum to zero#
+    CELL.DIRICHLETPRECISION <- 100#
+    MU.METHYLATION.BETA.A0 <- 0.25#
+    MU.METHYLATION.BETA.B0 <- 0.25#
+    N.METHYLATION.DMR <- 250#
+    EIG <- c(0.2,0.05)#
+    TOTALVARMICROARRAY <- 0.0625#
+    TOTALVAR <- 0.0325/4#
+    ERRDISPERSION <- 10#
+    N1 <- m   # Number of CpGs#
+    N2 <- N    # Number of subjects#
+    ZETA <- 1#
+    # Calculated quantities constant over all simulations#
+    NCELL <- length(CELL.SLOPE)  # Number of cell types#
+    ###
+    b0 = rtruncnorm(N.METHYLATION.DMR, a=0, b=0.4, mean = 0.1, sd = 0.1)#
+    b1 = rtruncnorm(N.METHYLATION.DMR, a=0.5, b=0.95, mean = 0.7, sd = 0.1)#
+    b2 = rtruncnorm(N.METHYLATION.DMR, a=0.5, b=0.95, mean = 0.7, sd = 0.1)#
+    b3 = rtruncnorm(N.METHYLATION.DMR, a=0.5, b=0.95, mean = 0.7, sd = 0.1)#
+    b4 = rtruncnorm(N.METHYLATION.DMR, a=0.1, b=0.95, mean = 0.5, sd = 0.3)#
+#
+    MU.METHYLATION <- matrix( # matrix of cell-specific methylation mean values#
+    c(b0,b1,b2,b3),N.METHYLATION.DMR, NCELL)#
+    FIXEDEFF <- sampleDNAMethylCoeffs(N1,#
+    slope=list(mu=BETA.NONZERO.MU, sigma=BETA.NONZERO.SIG , pi=BETA.PROP),#
+    dmr=MU.METHYLATION%*%CELL.INTERCEPT)#
+    SIGMA <- TOTALVAR#
+    ALPHA.METH <- 1-1/(1+exp(FIXEDEFF[,1]))#
+    MU.METH <- outer(ALPHA.METH, rep(1,N2), "*")#
+    Fixed.Eff.x <- rep(0,N1)#
+    Fixed.Eff.x[1:(N.METHYLATION.DMR/5)] <-b4.value#
+    nonmethy.eff = (N1-N.METHYLATION.DMR)/5#
+    Fixed.Eff.x[(N.METHYLATION.DMR+1):(N.METHYLATION.DMR+nonmethy.eff)] <-b4.value#
+    BETA.METH <- ZETA*Fixed.Eff.x#
+    ## calculate the cell-type proportion#
+    x <- runif(N2, min=0.1, max=0.9)#
+    #x <- rtruncnorm(N2, a=0.1, b=0.9, mean = 0.5, sd = 0.3)#
+    # generate the cell type proportion#
+    dirichlet.wi = c(0.1,0.1,0.2,0.6)+as.matrix(c(0, 0,0.03,-0.03))%*% t(as.matrix(x))#
+    rou = 100#
+    omega = matrix(NA,N2,4)#
+    for (i in 1:N2)#
+    {#
+        omega[i,] = rdirichlet(1,(rou*dirichlet.wi)[,i])#
+    }#
+    ################
+    cell.0 <- omega[,1]#
+    cell.1 <- omega[,2]#
+    cell.2 <- omega[,3]#
+    cell.3 <- omega[,4]#
+    xb = 0.1 + 0.2 * x#
+    cell.4 <- rbinom(N2, 1, prob=1/(1+exp(-xb))) # I think we cannot generate the bionimal data like this. There must be something wrong with it. I don't know. And we must figure it out. If the #
+#
+    # replace the methylation cell-type intercept with the effect of metylation cell type#
+    mu.cell <-  as.matrix(b0) %*% t(as.matrix(cell.0))+ as.matrix(b1) %*% t(as.matrix(cell.1))+as.matrix(b2) %*% t(as.matrix(cell.2))+as.matrix(b3) %*% t(as.matrix(cell.3)) +  0.2 * as.matrix(b4) %*% t(as.matrix(cell.4))#
+    mu <- MU.METH#
+    # replace the methylation cell-type intercept with the effect of metylation cell type#
+    mu[1:N.METHYLATION.DMR,] <- mu.cell#
+    mu <- as.matrix(BETA.METH) %*% t(as.matrix(x)) + mu + (0.03*matrix(rnorm(N1*N2),N1,N2))#
+    #   mu <- ifelse(mu<0.000001, 0.000001, mu)#
+    #   mu <- ifelse(mu>0.999999, 0.999999, mu)#
+    muAvg <- apply(mu,1,mean)#
+    dispersion <- pmax(muAvg*(1-muAvg)/SIGMA/SIGMA,2)-1#
+    muA <- as.vector(dispersion*mu)#
+    muB <- as.vector(dispersion*(1-mu))#
+    # The Y is beta value, It's what we need.#
+    Y <- mu#
+    x1=x#
+    colnames(Y) =c(1:dim(Y)[2])#
+    rownames(Y) =c(1:dim(Y)[1])#
+    cell.4 = as.factor(cell.4)#
+    pheno = data.frame(cell.0, cell.1, cell.2, cell.3, x1,cell.4)#
+    out.pheno = pheno[,2:6]
+install.packages("gplots")
+###
+require(gplots) #
+## construct some fake gene names..#
+oneName <- function() paste(sample(LETTERS,5,replace=TRUE),collapse="")#
+geneNames <- replicate(1000, oneName())#
+#
+## #
+GroupA <- sample(geneNames, 400, replace=FALSE)#
+GroupB <- sample(geneNames, 750, replace=FALSE)#
+GroupC <- sample(geneNames, 250, replace=FALSE)#
+GroupD <- sample(geneNames, 300, replace=FALSE)#
+#
+venn(list(GrpA=GroupA,GrpB=GroupB,GrpC=GroupC,GrpD=GroupD))
+? venn
+## Example using a list of item names belonging to the#
+## specified group.#
+###
+#
+## construct some fake gene names..#
+oneName <- function() paste(sample(LETTERS,5,replace=TRUE),collapse="")#
+geneNames <- replicate(1000, oneName())#
+#
+###
+GroupA <- sample(geneNames, 400, replace=FALSE)#
+GroupB <- sample(geneNames, 750, replace=FALSE)#
+GroupC <- sample(geneNames, 250, replace=FALSE)#
+GroupD <- sample(geneNames, 300, replace=FALSE)#
+input  <-list(GroupA,GroupB,GroupC,GroupD)#
+input#
+#
+tmp <- venn(input)#
+attr(tmp, "intersections")#
+#
+###
+## Example using a list of item indexes belonging to the#
+## specified group.#
+###
+GroupA.i <- which(geneNames %in% GroupA)#
+GroupB.i <- which(geneNames %in% GroupB)#
+GroupC.i <- which(geneNames %in% GroupC)#
+GroupD.i <- which(geneNames %in% GroupD)#
+input.i  <-list(A=GroupA.i,B=GroupB.i,C=GroupC.i,D=GroupD.i)#
+input.i#
+#
+venn(input.i)
+require(venneuler)#
+v <- venneuler(c(A=450, B=1800, "A&B"=230))#
+plot(v)
+install.packages("venneuler")
+require(venneuler)#
+v <- venneuler(c(A=450, B=1800, "A&B"=230))#
+plot(v)
+install.packages("VennDiagram")
+## Not run:    venn.plot <- venn.diagram(    list(A = 1:150, B = 121:170),    "Venn_2set_simple.tiff"    );    venn.plot <- venn.diagram(    list(A = 1:150, B = 121:170, C = 101:200),    "Venn_3set_simple.tiff"    );    ## End(Not run)    # a more elaborate two-set Venn diagram with title and subtitle    venn.plot <- venn.diagram(    x = list(    "A" = 1:100,    "B" = 96:140    ),    filename = "Venn_2set_complex.tiff",    scaled = TRUE,    ext.text = TRUE,    ext.line.lwd = 2,    ext.dist = -0.15,    ext.length = 0.9,    ext.pos = -4,    inverted = TRUE,    cex = 2.5,    cat.cex = 2.5,    rotation.degree = 45,    main = "Complex Venn Diagram",    sub = "Featuring: rotation and external lines",    main.cex = 2,    sub.cex = 1    );
+library(   ## Not run:    venn.plot <- venn.diagram(    list(A = 1:150, B = 121:170),    "Venn_2set_simple.tiff"    );    venn.plot <- venn.diagram(    list(A = 1:150, B = 121:170, C = 101:200),    "Venn_3set_simple.tiff"    );    ## End(Not run)    # a more elaborate two-set Venn diagram with title and subtitle    venn.plot <- venn.diagram(    x = list(    "A" = 1:100,    "B" = 96:140    ),    filename = "Venn_2set_complex.tiff",    scaled = TRUE,    ext.text = TRUE,    ext.line.lwd = 2,    ext.dist = -0.15,    ext.length = 0.9,    ext.pos = -4,    inverted = TRUE,    cex = 2.5,    cat.cex = 2.5,    rotation.degree = 45,    main = "Complex Venn Diagram",    sub = "Featuring: rotation and external lines",    main.cex = 2,    sub.cex = 1    );)
+library("VennDiagram")
+library(   ## Not run:    venn.plot <- venn.diagram(    list(A = 1:150, B = 121:170),    "Venn_2set_simple.tiff"    );    venn.plot <- venn.diagram(    list(A = 1:150, B = 121:170, C = 101:200),    "Venn_3set_simple.tiff"    );    ## End(Not run)    # a more elaborate two-set Venn diagram with title and subtitle    venn.plot <- venn.diagram(    x = list(    "A" = 1:100,    "B" = 96:140    ),    filename = "Venn_2set_complex.tiff",    scaled = TRUE,    ext.text = TRUE,    ext.line.lwd = 2,    ext.dist = -0.15,    ext.length = 0.9,    ext.pos = -4,    inverted = TRUE,    cex = 2.5,    cat.cex = 2.5,    rotation.degree = 45,    main = "Complex Venn Diagram",    sub = "Featuring: rotation and external lines",    main.cex = 2,    sub.cex = 1    );)
+source("http://www.bioconductor.org/biocLite.R")
+class(biocLite)
+biocLite("limma")
+(9*77)/(8*19)
+(11*87)/(29*33)
+(25/200)/(8/550
+)
+25*0.75 + 175*(1 – 0.80)
+= 25*0.75 + 175*(1 – 0.80)
+25*0.75 + 175*(1 – 0.80)
+25*0.75 + 175*(1 - 0.80)
+175*0.80 + 25*(1 - 0.75)
+542*0.80 + 8*(1 - 0.75)
+= (54/200)/(114/550)
+(54/200)/(114/550)
+library(devtools)#
+install_github("ChongWu-Biostat/MethyImpute") # i
+lme
+library(nlme)
+lme
+getVarCov
+library(mice)
+?mice
+library(devtools)#
+install_github("ChongWu-Biostat/MethyImpute") # install the prclust packages
+library(MethyImpute)#
+## Set the initial conditions#
+N <- 500 ## Total sample size (subjects)#
+m <- 1000  ## Total CpG sites#
+missing.prop = 0.3 ## missing rate#
+b4.value = 0.02    ## The effect size#
+seed = 1#
+data = simulatingData(seed,N,m,missing.prop, b4.value)
+Y = data$reference.Y#
+pheno = data$pheno#
+pheno = pheno[,2:5]#
+reference.index = data$reference.num#
+missing.index = data$test.num#
+missing.cov.name = c("cell.1","cell.2","cell.3")#
+complete.cov.name = "x1"#
+m=5#
+maxit = 5#
+max.refernce.methy = 30#
+defaultMethod = c("norm", "logreg", "polyreg", "polr")#
+imp = methy.mice(Y,pheno,missing.index, reference.index, missing.cov.name,complete.cov.name,max.refernce.methy = 30, m=30,maxit = 5,defaultMethod = c("norm", "logreg", "polyreg", "polr"))
+imputed.b4 = matrix(NA,50,5)#
+  for ( i in 1:50) {#
+    fit <- with(imp, lm(as.formula(paste(paste("methy",i,sep=""),"~ cell.1 + cell.2 + cell.3 +x1",sep =""))))#
+      fit.summary = summary(pool(fit))#
+      imputed.b4[i,1] = fit.summary[5,1] - 1.96 * fit.summary[5,2]#
+      imputed.b4[i,2] = fit.summary[5,1]#
+      imputed.b4[i,3] = fit.summary[5,1] + 1.96 * fit.summary[5,2]#
+      imputed.b4[i,4] = fit.summary[5,5] # p-vlaue#
+      imputed.b4[i,5] = fit.summary[5,2]#
+  }#
+#
+  colnames(imputed.b4) = c("Lower","Estimated","Uppper","pvalue","SE")
+imputed.b4
+Y = data$reference.Y#
+pheno = data$pheno#
+#
+##################
+reference.N = floor(N*(1-missing.prop))#
+reference.num = c(1:reference.N)#
+#
+reference.Y = Y[,reference.num]#
+reference.pheno =pheno[reference.num,]#
+#
+test.num = c((reference.N+1):N)#
+true.pheno = pheno[test.num,]#
+pheno[test.num,c(1:4)] =NA#
+#
+our.testData_Assay =Y[,test.num]#
+our.testData_Pheno =pheno[test.num,]#
+our.validationData_Assay =  Y[,reference.num]#
+our.validationData_Pheno = pheno[reference.num,]#
+# reference.CpG contains the reference methylation data. We can run the single LMM to get the most significant CpG sites for each missing cell type proportion. Here we assume that we already have it.#
+reference.CpG =reference.Y  # Validation methylation (CpGs x subjects)#
+#
+# The missing value name you want to impute#
+missing.name = c("cell.0","cell.1","cell.2","cell.3")#
+# number of CpG sites you want to use to impute the missing data#
+missing.n = 200#
+#
+# The methylation data corresponding to the subjects that cell type proportion is missing#
+infer.CpG = our.testData_Assay # Inference methylation (CpGs x subjects)#
+#
+###########################################################
+## The main function to impute the missing data       #####
+###########################################################
+projection.based(reference.CpG,reference.pheno,infer.CpG,missing.name,missing.n = 200)
+17544/1008
+17*24
+17544/408
+18*1008
+1008/24
+24*17
+0.05/200
+?glm
+b4.value = 0#
+n.informative = 5
+BETA.METH = c(rep(b4.value,n.informative),rep(-b4.value,n.informative),rep(0,20-2*n.informative))
+BETA.METH
+b4.value = 0.01
+BETA.METH = c(rep(b4.value,n.informative),rep(-b4.value,n.informative),rep(0,20-2*n.informative))
+BETA.METH
+install.packages("trio")
+library(igraph)
+spilt
+split
+sample(30,1:300)
+sample(1:300)
+sample(1:300,30)
+order(sample(1:300,30))
+sort(sample(1:300,30))
+sort(sample(1:300,15))
+setwd("/Users/chong/Google Drive/homework/research-undergoing/GeneNetworkTest/genenetwkTest/sim6")#
+########################################################################
+## generate the network first                                       ####
+########################################################################
+netwk3 = read.table("finalnetwk.txt",sep = ",")#
+active = c("15","18","19","24","41","101","118","119","211","233","240","258","267","294","295")#
+netwk3$index =ifelse(netwk3[,1] %in% active & netwk3[,2] %in% active, "active", "inactive")#
+library(igraph)#
+#netwk.informative = netwk3[netwk3[,1] %in% informative & netwk3[,2] %in% informative,]#
+## Finding the connected components#
+g <- graph.data.frame(netwk3, directed=FALSE)#
+bsk.network<-graph.data.frame(netwk3, directed=F)#
+# Inspect the data:#
+V(bsk.network) #prints the list of vertices (people)#
+E(bsk.network) #prints the list of edges (relationships)#
+degree(bsk.network) #print the number of edges per vertex (relationships per people)#
+# First try. We can plot the graph right away but the results will usually be unsatisfactory:#
+#plot(bsk.network)#
+#Subset the data. If we want to exclude people who are in the network only tangentially (participate in one or two relationships only)#
+# we can exclude the by subsetting the graph on the basis of the 'degree':#
+bad.vs<-V(bsk.network)[degree(bsk.network)<8 & !V(bsk.network)$name %in% active] #identify those vertices part of less than three edges#
+bsk.network<-delete.vertices(bsk.network, bad.vs) #exclude them from the graph#
+# Plot the data.Some details about the graph can be specified in advance.#
+# For example we can separate some vertices (people) by color:#
+V(bsk.network)$color<-ifelse(V(bsk.network)$name %in% active, 'red', 'white') #useful for highlighting certain people. Works by matching the name attribute of the vertex to the one specified in the 'ifelse' expression#
+V(bsk.network)$size<-ifelse(V(bsk.network)$name %in% active,5, 0.2)#
+degree(bsk.network)/10#here the size of the vertices is specified by the degree of the vertex, so that people supervising more have get proportionally bigger dots. Getting the right scale gets some playing around with the parameters of the scale function (from the 'base' package)#
+V(bsk.network)$shape<- ifelse(V(bsk.network)$name %in% active , 'circle', 'square')#
+#degree(bsk.network)/10#
+E(bsk.network)$color<-ifelse(E(bsk.network)$index=="active", "red", "grey")#
+# or depending on the different specialization ('spec'):#
+#E(bsk.network)$color<-ifelse(E(bsk.network)$spec=='X', "red", ifelse(E(bsk.network)$spec=='Y', "blue", "grey"))#
+# Note that if the same attribute is specified beforehand and inside the function, the former will be overridden.#
+# And finally the plot itself:#
+par(mai=c(0,0,1,0)) 			#this specifies the size of the margins. the default settings leave too much free space on all sides (if no axes are printed)#
+plot(bsk.network,				#the graph to be plotted#
+layout=layout.fruchterman.reingold,	# the layout method. see the igraph documentation for details#
+main='BRCA1, BRCA2, TP53 Network',	#specifies the title#
+vertex.label.dist=0,			#puts the name labels slightly off the dots#
+vertex.frame.color='black',     #the color of the border of the dots#
+vertex.label.color='black',		#the color of the name labels#
+vertex.label.font=0.7,			#the font of the name labels#
+#vertex.label=as.character(1:length(V(bsk.network)$name)),		#specifies the lables of the vertices. in this case the 'name' attribute is used#
+vertex.label.cex=0.7			#specifies the size of the font of the labels. can also be made to vary#
+)
+setwd("/Users/chong/Google Drive/homework/research-undergoing/GeneNetworkTest/genenetwkTest/simulation/sim6")#
+########################################################################
+## generate the network first                                       ####
+########################################################################
+netwk3 = read.table("finalnetwk.txt",sep = ",")#
+active = c("15","18","19","24","41","101","118","119","211","233","240","258","267","294","295")#
+netwk3$index =ifelse(netwk3[,1] %in% active & netwk3[,2] %in% active, "active", "inactive")#
+library(igraph)#
+#netwk.informative = netwk3[netwk3[,1] %in% informative & netwk3[,2] %in% informative,]#
+## Finding the connected components#
+g <- graph.data.frame(netwk3, directed=FALSE)#
+bsk.network<-graph.data.frame(netwk3, directed=F)#
+# Inspect the data:#
+V(bsk.network) #prints the list of vertices (people)#
+E(bsk.network) #prints the list of edges (relationships)#
+degree(bsk.network) #print the number of edges per vertex (relationships per people)#
+# First try. We can plot the graph right away but the results will usually be unsatisfactory:#
+#plot(bsk.network)#
+#Subset the data. If we want to exclude people who are in the network only tangentially (participate in one or two relationships only)#
+# we can exclude the by subsetting the graph on the basis of the 'degree':#
+bad.vs<-V(bsk.network)[degree(bsk.network)<8 & !V(bsk.network)$name %in% active] #identify those vertices part of less than three edges#
+bsk.network<-delete.vertices(bsk.network, bad.vs) #exclude them from the graph#
+# Plot the data.Some details about the graph can be specified in advance.#
+# For example we can separate some vertices (people) by color:#
+V(bsk.network)$color<-ifelse(V(bsk.network)$name %in% active, 'red', 'white') #useful for highlighting certain people. Works by matching the name attribute of the vertex to the one specified in the 'ifelse' expression#
+V(bsk.network)$size<-ifelse(V(bsk.network)$name %in% active,5, 0.2)#
+degree(bsk.network)/10#here the size of the vertices is specified by the degree of the vertex, so that people supervising more have get proportionally bigger dots. Getting the right scale gets some playing around with the parameters of the scale function (from the 'base' package)#
+V(bsk.network)$shape<- ifelse(V(bsk.network)$name %in% active , 'circle', 'square')#
+#degree(bsk.network)/10#
+E(bsk.network)$color<-ifelse(E(bsk.network)$index=="active", "red", "grey")#
+# or depending on the different specialization ('spec'):#
+#E(bsk.network)$color<-ifelse(E(bsk.network)$spec=='X', "red", ifelse(E(bsk.network)$spec=='Y', "blue", "grey"))#
+# Note that if the same attribute is specified beforehand and inside the function, the former will be overridden.#
+# And finally the plot itself:#
+par(mai=c(0,0,1,0)) 			#this specifies the size of the margins. the default settings leave too much free space on all sides (if no axes are printed)#
+plot(bsk.network,				#the graph to be plotted#
+layout=layout.fruchterman.reingold,	# the layout method. see the igraph documentation for details#
+main='BRCA1, BRCA2, TP53 Network',	#specifies the title#
+vertex.label.dist=0,			#puts the name labels slightly off the dots#
+vertex.frame.color='black',     #the color of the border of the dots#
+vertex.label.color='black',		#the color of the name labels#
+vertex.label.font=0.7,			#the font of the name labels#
+#vertex.label=as.character(1:length(V(bsk.network)$name)),		#specifies the lables of the vertices. in this case the 'name' attribute is used#
+vertex.label.cex=0.7			#specifies the size of the font of the labels. can also be made to vary#
+)
+active = c("15","18","19","24","41","101","118","119","211","233","240","258","267","294","295")
+setwd("/Users/chong/Google Drive/homework/research-undergoing/GeneNetworkTest/genenetwkTest/simulation/sim6")#
+########################################################################
+## generate the network first                                       ####
+########################################################################
+netwk3 = read.table("finalnetwk.txt",sep = ",")#
+active = c("22","23","78","28","11","33","152","154","162","164","187","206","207","248","275")#
+netwk3$index =ifelse(netwk3[,1] %in% active & netwk3[,2] %in% active, "active", "inactive")#
+library(igraph)#
+#netwk.informative = netwk3[netwk3[,1] %in% informative & netwk3[,2] %in% informative,]#
+## Finding the connected components#
+g <- graph.data.frame(netwk3, directed=FALSE)#
+bsk.network<-graph.data.frame(netwk3, directed=F)#
+# Inspect the data:#
+V(bsk.network) #prints the list of vertices (people)#
+E(bsk.network) #prints the list of edges (relationships)#
+degree(bsk.network) #print the number of edges per vertex (relationships per people)#
+# First try. We can plot the graph right away but the results will usually be unsatisfactory:#
+#plot(bsk.network)#
+#Subset the data. If we want to exclude people who are in the network only tangentially (participate in one or two relationships only)#
+# we can exclude the by subsetting the graph on the basis of the 'degree':#
+bad.vs<-V(bsk.network)[degree(bsk.network)<8 & !V(bsk.network)$name %in% active] #identify those vertices part of less than three edges#
+bsk.network<-delete.vertices(bsk.network, bad.vs) #exclude them from the graph#
+# Plot the data.Some details about the graph can be specified in advance.#
+# For example we can separate some vertices (people) by color:#
+V(bsk.network)$color<-ifelse(V(bsk.network)$name %in% active, 'red', 'white') #useful for highlighting certain people. Works by matching the name attribute of the vertex to the one specified in the 'ifelse' expression#
+V(bsk.network)$size<-ifelse(V(bsk.network)$name %in% active,5, 0.2)#
+degree(bsk.network)/10#here the size of the vertices is specified by the degree of the vertex, so that people supervising more have get proportionally bigger dots. Getting the right scale gets some playing around with the parameters of the scale function (from the 'base' package)#
+V(bsk.network)$shape<- ifelse(V(bsk.network)$name %in% active , 'circle', 'square')#
+#degree(bsk.network)/10#
+E(bsk.network)$color<-ifelse(E(bsk.network)$index=="active", "red", "grey")#
+# or depending on the different specialization ('spec'):#
+#E(bsk.network)$color<-ifelse(E(bsk.network)$spec=='X', "red", ifelse(E(bsk.network)$spec=='Y', "blue", "grey"))#
+# Note that if the same attribute is specified beforehand and inside the function, the former will be overridden.#
+# And finally the plot itself:#
+par(mai=c(0,0,1,0)) 			#this specifies the size of the margins. the default settings leave too much free space on all sides (if no axes are printed)#
+plot(bsk.network,				#the graph to be plotted#
+layout=layout.fruchterman.reingold,	# the layout method. see the igraph documentation for details#
+main='BRCA1, BRCA2, TP53 Network',	#specifies the title#
+vertex.label.dist=0,			#puts the name labels slightly off the dots#
+vertex.frame.color='black',     #the color of the border of the dots#
+vertex.label.color='black',		#the color of the name labels#
+vertex.label.font=0.7,			#the font of the name labels#
+#vertex.label=as.character(1:length(V(bsk.network)$name)),		#specifies the lables of the vertices. in this case the 'name' attribute is used#
+vertex.label.cex=0.7			#specifies the size of the font of the labels. can also be made to vary#
+)
+85+307+368+613+613+981+1103
+29000-15000
+14000、3
+14000/3
+30000-10000
+30000-10000-7000
+29000-6000-7000-6000
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-10-27/results")#
+#
+library(xtable)#
+###
+library(ggplot2)#
+res = read.table("sim10.txt",sep=",")#
+#
+res[,3] = factor(rep(1:9,times = 7),levels =  1:9)#
+## create the plot#
+base_size = 12#
+base_family = ""#
+p1 = ggplot(res, aes(x=x, y=power,group = Methods, color = Methods,shape = Methods,linetype = Methods))+ annotate("text", x = 1.8, y = 0.89, label = "X,Z Correlated", size = 3.5) +#
+annotate("text", x = 1.8, y = 0.85, label = "Adjustment for X", size = 3.5) +#
+scale_shape_manual(values=1:nlevels(res$Methods),breaks = levels(res$Methods),#
+labels = c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU"))+ labs(x=expression(paste("Effect ", beta,sep="")), y="Power")+#
+geom_point(size = 2) + geom_line(lwd = 0.5) + scale_colour_discrete(breaks = levels(res$Methods),#
+labels =c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU"))+ scale_linetype_discrete(breaks = levels(res$Methods),#
+labels = c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU")) + guides(Methods = guide_legend(ncol = 6, byrow = TRUE)) +theme_grey(base_size = base_size, base_family = base_family) %+replace%#
+theme(legend.position=c(0.12, .7),legend.text.align = 0 ,axis.text = element_text(size = rel(0.8)), axis.ticks = element_line(colour = "black"),#
+legend.key = element_rect(colour = "grey80"), panel.background = element_rect(fill = "white",#
+colour = NA), panel.border = element_rect(fill = NA,#
+colour = "grey50"), panel.grid.major = element_line(colour = "grey90",#
+size = 0.2), panel.grid.minor = element_line(colour = "grey98",#
+size = 0.5), strip.background = element_rect(fill = "grey80",#
+colour = "grey50", size = 0.2)) +ggtitle("B")#
+#
+p1
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-10-27/results")#
+#
+library(xtable)#
+###
+library(ggplot2)#
+res = read.table("sim9.txt",sep=",")#
+#
+res[,3] = factor(rep(1:9,times = 7),levels =  1:9)#
+## create the plot#
+base_size = 12#
+base_family = ""#
+p1 = ggplot(res, aes(x=x, y=power,group = Methods, color = Methods,shape = Methods,linetype = Methods))+ annotate("text", x = 1.4, y = 0.915, label = "X,Z Independent", size = 3.5) +#
+annotate("text", x = 1.4, y = 0.875, label = "Adjustment for X", size = 3.5) +#
+scale_shape_manual(values=1:nlevels(res$Methods),breaks = levels(res$Methods),#
+labels = c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU"))+ labs(x=expression(paste("Effect ", beta,sep="")), y="Power")+#
+geom_point(size = 2) + geom_line(lwd = 0.5) + scale_colour_discrete(breaks = levels(res$Methods),#
+labels =c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU"))+ scale_linetype_discrete(breaks = levels(res$Methods),#
+labels = c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU")) + guides(Methods = guide_legend(ncol = 6, byrow = TRUE)) +theme_grey(base_size = base_size, base_family = base_family) %+replace%#
+theme(legend.position=c(0.12, .7),legend.text.align = 0 ,axis.text = element_text(size = rel(0.8)), axis.ticks = element_line(colour = "black"),#
+legend.key = element_rect(colour = "grey80"), panel.background = element_rect(fill = "white",#
+colour = NA), panel.border = element_rect(fill = NA,#
+colour = "grey50"), panel.grid.major = element_line(colour = "grey90",#
+size = 0.2), panel.grid.minor = element_line(colour = "grey98",#
+size = 0.5), strip.background = element_rect(fill = "grey80",#
+colour = "grey50", size = 0.2)) +ggtitle("A")#
+#
+p1
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-10-27/results")#
+#
+library(xtable)#
+###
+library(ggplot2)#
+res = read.table("sim9.txt",sep=",")#
+#
+res[,3] = factor(rep(1:9,times = 7),levels =  1:9)#
+## create the plot#
+base_size = 12#
+base_family = ""#
+p1 = ggplot(res, aes(x=x, y=power,group = Methods, color = Methods,shape = Methods,linetype = Methods))+ annotate("text", x = 1.4, y = 0.915, label = "X,Z Independent", size = 3.5) +#
+annotate("text", x = 1.4, y = 0.875, label = "Adjustment for X", size = 3.5) +#
+scale_shape_manual(values=1:nlevels(res$Methods),breaks = levels(res$Methods),#
+labels = c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU"))+ labs(x=expression(paste("Effect ", beta,sep="")), y="Power")+#
+geom_point(size = 2) + geom_line(lwd = 0.5) + scale_colour_discrete(breaks = levels(res$Methods),#
+labels =c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU"))+ scale_linetype_discrete(breaks = levels(res$Methods),#
+labels = c(expression(K[u]),expression(K[5]),expression(K[w]),expression(K[opt]),expression(aMiSP[w]),expression(paste(aMiSPU[u],"(2)",sep="")),expression(paste(MiSPU[u],"(",infinity,")",sep="")),expression(aMiSP[u]),"aMiSPU")) + guides(Methods = guide_legend(ncol = 6, byrow = TRUE)) +theme_grey(base_size = base_size, base_family = base_family) %+replace%#
+theme(legend.position=c(0.12, .7),legend.text.align = 0 ,axis.text = element_text(size = rel(0.8)), axis.ticks = element_line(colour = "black"),#
+legend.key = element_rect(colour = "grey80"), panel.background = element_rect(fill = "white",#
+colour = NA), panel.border = element_rect(fill = NA,#
+colour = "grey50"), panel.grid.major = element_line(colour = "grey90",#
+size = 0.2), panel.grid.minor = element_line(colour = "grey98",#
+size = 0.5), strip.background = element_rect(fill = "grey80",#
+colour = "grey50", size = 0.2)) +ggtitle("A")#
+#
+p1

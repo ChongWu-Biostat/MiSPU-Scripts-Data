@@ -1,0 +1,24 @@
+#!/bin/bash -l
+#PBS -l walltime=10:00,pmem=2500mb,nodes=42:ppn=24
+#PBS -m abe
+#PBS -M wuxx0845@umn.edu
+#PBS -o /panfs/roc/groups/1/panwei/wuxx0845/swak/logfile/
+#PBS -e /panfs/roc/groups/1/panwei/wuxx0845/swak/logfile/
+
+proc=0
+for i in `seq  0 41`
+do
+for j in  `seq 1 24`
+do
+job=$(($i*24+$j-1))
+scripts=/panfs/roc/groups/1/panwei/wuxx0845/swak/sim3/
+echo "#!/bin/bash -l" >$scripts/sim$job.sh
+echo "cd $scripts">>$scripts/sim$job.sh
+echo "module load R/3.2.1" >>$scripts/sim$job.sh
+echo "R CMD BATCH --no-save --no-restore '--args  job=$job' /panfs/roc/groups/1/panwei/wuxx0845/swak/sim3/run.R  /panfs/roc/groups/1/panwei/wuxx0845/swak/sim3/run$job.txt" >> $scripts/sim$job.sh
+chmod 777 $scripts/sim$job.sh
+pbsdsh -n $proc $scripts/sim$job.sh &
+proc=$(($proc+1))
+done
+done
+wait

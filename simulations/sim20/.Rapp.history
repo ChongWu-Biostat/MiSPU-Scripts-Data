@@ -1,0 +1,2331 @@
+max(t(X %*% matrix(rep(c(0.1,0.5),times = n.y),2,n.y) ))
+min(t(X %*% matrix(rep(c(0.1,0.5),times = n.y),2,n.y) ))
+t(X %*% matrix(rep(c(0.01,0.05),times = n.y),2,n.y) )
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+beta = c(rep(0,1),rep(0,n.y-1))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+Y <- t(X %*% matrix(rep(c(0.01,0.05),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+SumSqU2(Y,X,Z,C)
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+beta = c(rep(0,1),rep(0,n.y-1))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+Y <- t(X %*% matrix(rep(c(0.01,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+SumSqU2(Y,X,Z,C)
+t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) )
+max( t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ))
+Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error
+max(Y)
+min(Y)
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0.5,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+SumSqU2(Y,X,Z,C)
+##################################
+### Simulation 1              ####
+##################################
+#
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+SumSqU2(Y,X,Z,C)
+res = matrix(NA,1000,2)#
+for(index in 1:1000){#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+res[index,] = SumSqU2(Y,X,Z,C)#
+}
+min(res[,1]
+)
+min(res[,1])
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+res = matrix(NA,1000,2)#
+for(index in 1:1000){#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL#
+res[index,] = SumSqU2(Y,X,Z,C)#
+}
+min(res[,1])
+sum(res[,1]<0.05)/1000
+as.matrix(beta) %*% t(as.matrix(Z))
+beta = c(rep(0.5,informative.num),rep(0,n.y-informative.num))
+as.matrix(beta) %*% t(as.matrix(Z))
+mean(error)
+mean(error[1,])
+mean(error[,1])
+mean(error[1,])
+n.y
+?mvrnorm
+SumSqU <- function(Y, X, Z,C) {#
+    beta <- Y#
+    beta = t(beta)#
+    is.X.null = is.null(X)#
+    if( is.X.null) {#
+        beta1 =as.data.frame(beta)#
+        beta1$chip = rep(1:length(C),each = C[1])#
+        beta1$Z = Z#
+    } else {#
+        X = as.data.frame(X)#
+        X$chip = rep(1:length(C),each = C[1])#
+        X$Z = Z#
+        beta1 = as.data.frame(cbind(beta,X))#
+    }#
+    site.list = colnames(beta)#
+    n = dim(Y)[2]#
+    mix_eff_cov=lapply(site.list, function(x)     #mixed models#
+    {#
+        if(is.X.null) {#
+            formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+        } else {#
+            formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+        }#
+        model =try (do.call("lmer", args = list(formula,data=beta1,na.action="na.exclude")))#
+        if (inherits(model, "try-error")) {#
+            c("NA")#
+        } else {#
+            v_a=as.data.frame(VarCorr(model))[1,4]        #var of batch eff#
+            v_e=as.data.frame(VarCorr(model))[2,4]      #var of error#
+            Cov=matrix(0,n,n)                        #list for block diagonal matrix#
+            tmp.D.index1 = 1#
+            for ( i in 1:length(C))#
+            {#
+                tmp.D.index2 = tmp.D.index1 + C[i]-1#
+            Cov[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]=solve(matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]))# matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]) ##
+                tmp.D.index1 = tmp.D.index2 + 1#
+            }#
+            return(Cov)#
+        }#
+    }#
+    ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+    names(mix_eff_cov)=site.list#
+    tilde.x = cbind(rep(1,n), beta1$X1,beta1$X2)#
+    score_stat=lapply(site.list, function(x)     #score stats for m sites#
+    {#
+        hat.beta = (solve(t(tilde.x) %*% mix_eff_cov[[x]] %*% tilde.x)) %*% (t(tilde.x) %*% mix_eff_cov[[x]] %*%as.matrix(beta1[x]))#
+        s=t(beta1[x])%*%mix_eff_cov[[x]] %*% beta1$Z-t(hat.beta) %*% t(tilde.x) %*% mix_eff_cov[[x]] %*% beta1$Z#
+    }#
+    )#
+    U=as.vector(unlist(score_stat))#
+    if(sum(is.na(U)) >0) {#
+        indicator =  !is.na(U)#
+        site.list = site.list[indicator]#
+        mix_eff_cov = mix_eff_cov[indicator]#
+        U = U[indicator]#
+        fianl.indicator = 9#
+    } else {#
+        fianl.indicator = 1#
+    }# delete the NA CpG sits#
+    m=length(site.list)#
+    T=t(U)%*%U                                    #SumSqU test statistic#
+    CovS=matrix(0,m,m)                        #cov of the m score stats#
+    tmp =list()#
+    sigma = list()#
+    tmp.x = list()#
+    for(i in 1:m) {#
+        tmp[[i]] =  beta1$Z %*% mix_eff_cov[[i]] %*%tilde.x %*% (solve(t(tilde.x) %*% mix_eff_cov[[i]] %*% tilde.x))#
+        sigma[[i]] = beta1$Z %*% mix_eff_cov[[i]]#
+        tmp.x[[i]] = t(tilde.x) %*% mix_eff_cov[[i]]#
+    }#
+    for ( i in 1:m)#
+    {#
+        for ( j in 1:i)#
+        {#
+            CovS[i,j]=CovS[j,i]= cov(beta1[site.list[i]],beta1[site.list[j]]) * ( sigma[[i]] %*% t(sigma[[j]]) - tmp[[i]] %*% tmp.x[[i]] %*% t(sigma[[j]]) - tmp[[j]] %*% tmp.x[[j]] %*% t(sigma[[i]]) +  tmp[[i]] %*% tmp.x[[i]] %*% t(tmp.x[[j]]) %*% t(tmp[[j]]) )#
+        }#
+    }#
+    c=eigen(CovS,only.values=TRUE)$values        #chi_sq distrbn#
+    a=Re(sum(c^3)/sum(c^2))#
+    b=Re(sum(c)-(sum(c^2)^2)/(sum(c^3)))#
+    d=Re((sum(c^2)^3)/(sum(c^3)^2))#
+    pSumSqU=(1-pchisq((T-b)/a,d))#
+    out.put = matrix(NA,1,2)#
+    colnames(out.put) = c("pvalue","indicator")#
+    out.put[1,] = c(pSumSqU, fianl.indicator)#
+    out.put#
+}
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+res = matrix(NA,1000,2)#
+for(index in 1:1000){#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0.5,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL#
+res[index,] = SumSqU(Y,X,Z,C)#
+}#
+#
+min(res[,1])#
+sum(res[,1]<0.05)/1000
+res
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0.5,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL
+SumSqU(Y,X,Z,C)
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL
+SumSqU(Y,X,Z,C)
+res = matrix(NA,100,2)#
+for(index in 1:100){#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 5#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL#
+#
+res[index,] = SumSqU(Y,X,Z,C)#
+}
+res
+quantile(res[,1])
+n = 100
+cbind(rep(1,n))
+class( cbind(rep(1,n)))
+for(index in 1:100){#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 1 # number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL#
+#
+res[index,] = SumSqU(Y,X,Z,C)#
+}
+res
+min(res)
+sum(res[,1]<0.05)/100
+SumSqU2 <- function(Y, X, Z,C) {#
+    X1 = X#
+    beta <- Y#
+    beta = t(beta)#
+    beta2 = beta#
+    is.X.null = is.null(X)#
+    if( is.X.null) {#
+        beta1 =as.data.frame(beta)#
+        beta1$chip = rep(1:length(C),each = C[1])#
+        beta1$Z = Z#
+    } else {#
+        X = as.data.frame(X)#
+        X$chip = rep(1:length(C),each = C[1])#
+        X$Z = Z#
+        beta1 = as.data.frame(cbind(beta,X))#
+    }#
+    site.list = colnames(beta)#
+    n = dim(Y)[2]#
+    sigsq=lapply(site.list, function(x)#
+    {#
+        c(var(beta1[x]))#
+    }#
+    ) # variance of methylation value for each site#
+    names(sigsq)=site.list#
+    X=Z#
+    if( is.X.null) {#
+        Y=cbind(rep(1,n))#
+    } else {#
+        Y=cbind(rep(1,n),X1) # other covariates including the intercept#
+    }#
+    H=Y%*%solve(t(Y)%*%Y)%*%t(Y)#
+    n1=dim(H)[1]#
+    I=diag(rep(1,n1))#
+    IH=I-H#
+    stat_t=lapply(site.list, function(x)#
+    {#
+        t(as.matrix(Z))%*%IH%*%as.matrix(beta1[x])/(sigsq[[x]])#
+    }#
+    )#
+    T=as.vector(unlist(stat_t))#
+    if(sum(is.na(T)) >0) {#
+        indicator =  !is.na(T)#
+        site.list = site.list[indicator]#
+        sigsq=as.vector(unlist(sigsq))#
+        sigsq = sigsq[indicator]#
+        T = T[indicator]#
+        beta2 = beta2[indicator,]#
+        beta2 = beta2[,indicator]#
+        fianl.indicator = 9#
+    } else {#
+        fianl.indicator = 1#
+        sigsq=as.vector(unlist(sigsq))#
+    }# delete the NA CpG sits#
+    test_stat=t(T)%*%T#
+    T=test_stat#
+    m=length(site.list)#
+    tau_sq=t(X)%*%IH%*%X#
+    Delta_2=diag(c(1/(sigsq^2)))#
+    Cov=c(tau_sq)*Delta_2%*%as.matrix(cov(beta2))#
+    c=eigen(Cov,only.values=TRUE)$values        #chi_sq distrbn#
+    a=Re(sum(c^3)/sum(c^2))#
+    b=Re(sum(c)-(sum(c^2)^2)/(sum(c^3)))#
+    d=Re((sum(c^2)^3)/(sum(c^3)^2))#
+    pSumSqU=(1-pchisq((T-b)/a,d))#
+    out.put = matrix(NA,1,2)#
+    colnames(out.put) = c("pvalue","indicator")#
+    out.put[1,] = c(pSumSqU,fianl.indicator)#
+    out.put#
+}
+res = matrix(NA,1000,2)#
+for(index in 1:1000){#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL#
+#
+res[index,] = SumSqU2(Y,X,Z,C)#
+}
+min(res[,1])#
+sum(res[,1]<0.05)/1000
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL
+### Simulation 1              ####
+##################################
+#
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+library(permute)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL
+beta <- Y#
+    beta = t(beta)#
+    is.X.null = is.null(X)#
+    if( is.X.null) {#
+        beta1 =as.data.frame(beta)#
+        beta1$chip = rep(1:length(C),each = C[1])#
+        beta1$Z = Z#
+    } else {#
+        X = as.data.frame(X)#
+        X$chip = rep(1:length(C),each = C[1])#
+        X$Z = Z#
+        beta1 = as.data.frame(cbind(beta,X))#
+    }#
+    site.list = colnames(beta)#
+    n = dim(Y)[2]
+x = site.list[1]
+if(is.X.null) {#
+            formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+        } else {#
+            formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+        }#
+        model =try (do.call("lmer", args = list(formula,data=beta1,na.action="na.exclude")))#
+        if (inherits(model, "try-error")) {#
+            c("NA")#
+        } else {#
+            v_a=as.data.frame(VarCorr(model))[1,4]        #var of batch eff#
+            v_e=as.data.frame(VarCorr(model))[2,4]      #var of error#
+            Cov=matrix(0,n,n)                        #list for block diagonal matrix#
+            tmp.D.index1 = 1#
+            for ( i in 1:length(C))#
+            {#
+                tmp.D.index2 = tmp.D.index1 + C[i]-1#
+            Cov[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]=solve(matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]))# matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]) ##
+                tmp.D.index1 = tmp.D.index2 + 1#
+            }#
+            return(Cov)#
+        }
+as.data.frame(VarCorr(model))
+Cov[1:10,1:10]
+sigma[1:10,1:10]
+solve(sigma[1:10,1:10])
+names(mix_eff_cov) = site.list#
+    if(is.X.null) {#
+        tilde.x = cbind(rep(1,n))#
+    } else {#
+        tilde.x = cbind(rep(1,n), beta1$X1,beta1$X2)#
+    }#
+    score_stat=lapply(site.list, function(x)     #score stats for m sites#
+    {#
+        hat.beta = (solve(t(tilde.x) %*% mix_eff_cov[[x]] %*% tilde.x)) %*% (t(tilde.x) %*% mix_eff_cov[[x]] %*%as.matrix(beta1[x]))#
+        s=t(beta1[x])%*%mix_eff_cov[[x]] %*% beta1$Z - t(hat.beta) %*% t(tilde.x) %*% mix_eff_cov[[x]] %*% beta1$Z#
+    }#
+    )
+？Re
+?Re
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20 # number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+X = NULL
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 2# number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")
+beta <- Y#
+    beta = t(beta)#
+    is.X.null = is.null(X)#
+    if( is.X.null) {#
+        beta1 =as.data.frame(beta)#
+        beta1$chip = rep(1:length(C),each = C[1])#
+        beta1$Z = Z#
+    } else {#
+        X = as.data.frame(X)#
+        X$chip = rep(1:length(C),each = C[1])#
+        X$Z = Z#
+        beta1 = as.data.frame(cbind(beta,X))#
+    }#
+    site.list = colnames(beta)#
+    n = dim(Y)[2]#
+    mix_eff_cov=lapply(site.list, function(x)     #mixed models#
+    {#
+        if(is.X.null) {#
+            formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+        } else {#
+            formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+        }#
+        model =try (do.call("lmer", args = list(formula,data=beta1,na.action="na.exclude")))#
+        if (inherits(model, "try-error")) {#
+            c("NA")#
+        } else {#
+            v_a=as.data.frame(VarCorr(model))[1,4]        #var of batch eff#
+            v_e=as.data.frame(VarCorr(model))[2,4]      #var of error#
+            Cov=matrix(0,n,n)                        #list for block diagonal matrix#
+            tmp.D.index1 = 1#
+            for ( i in 1:length(C))#
+            {#
+                tmp.D.index2 = tmp.D.index1 + C[i]-1#
+            Cov[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]=solve(matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]))# matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]) ##
+                tmp.D.index1 = tmp.D.index2 + 1#
+            }#
+            return(Cov)#
+        }#
+    }#
+    ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+    names(mix_eff_cov) = site.list#
+    if(is.X.null) {#
+        tilde.x = cbind(rep(1,n))#
+    } else {#
+        tilde.x = cbind(rep(1,n), beta1$X1,beta1$X2)#
+    }
+site.list
+beta1[1:5,]
+rep(0,n)
+dim(beta1)
+sigma
+mvrnorm(n = 2, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+tmp.res = matrix(NA,10000,2)#
+    for (i in 1:10000) {#
+        beta1[1:2,] = t(mvrnorm(n = 2, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))#
+    score_stat=lapply(site.list, function(x)     #score stats for m sites#
+    {#
+        hat.beta = (solve(t(tilde.x) %*% mix_eff_cov[[x]] %*% tilde.x)) %*% (t(tilde.x) %*% mix_eff_cov[[x]] %*%as.matrix(beta1[x]))#
+        s=t(beta1[x]) %*% mix_eff_cov[[x]] %*% beta1$Z - t(hat.beta) %*% t(tilde.x) %*% mix_eff_cov[[x]] %*% beta1$Z#
+    }#
+    )#
+    tmp.res[i,] = as.vector(unlist(score_stat))#
+    }
+##################################
+### Simulation 1              ####
+##################################
+#
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+library(permute)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+res = matrix(NA,1000,2)
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 2# number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")
+beta <- Y#
+    beta = t(beta)#
+    is.X.null = is.null(X)#
+    if( is.X.null) {#
+        beta1 =as.data.frame(beta)#
+        beta1$chip = rep(1:length(C),each = C[1])#
+        beta1$Z = Z#
+    } else {#
+        X = as.data.frame(X)#
+        X$chip = rep(1:length(C),each = C[1])#
+        X$Z = Z#
+        beta1 = as.data.frame(cbind(beta,X))#
+    }#
+    site.list = colnames(beta)#
+    n = dim(Y)[2]#
+    mix_eff_cov=lapply(site.list, function(x)     #mixed models#
+    {#
+        if(is.X.null) {#
+            formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+        } else {#
+            formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+        }#
+        model =try (do.call("lmer", args = list(formula,data=beta1,na.action="na.exclude")))#
+        if (inherits(model, "try-error")) {#
+            c("NA")#
+        } else {#
+            v_a=as.data.frame(VarCorr(model))[1,4]        #var of batch eff#
+            v_e=as.data.frame(VarCorr(model))[2,4]      #var of error#
+            Cov=matrix(0,n,n)                        #list for block diagonal matrix#
+            tmp.D.index1 = 1#
+            for ( i in 1:length(C))#
+            {#
+                tmp.D.index2 = tmp.D.index1 + C[i]-1#
+            Cov[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]=solve(matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]))# matrix(rep(v_a,C[i]*C[i]),C[i],C[i]) + diag(v_e,C[i]) ##
+                tmp.D.index1 = tmp.D.index2 + 1#
+            }#
+            return(Cov)#
+        }#
+    }#
+    ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+    names(mix_eff_cov) = site.list#
+    if(is.X.null) {#
+        tilde.x = cbind(rep(1,n))#
+    } else {#
+        tilde.x = cbind(rep(1,n), beta1$X1,beta1$X2)#
+    }
+sigma = matrix(c(0.1,0.05,0.05,0.2),2,2)
+sigma
+beta1[1:2,] = mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))
+beta1[1:2,] = mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+beta1[1:2,] = mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+class(mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))
+dim(beta1)
+beta1[,1:2] = mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+tmp.res = matrix(NA,10000,2)#
+    sigma = matrix(c(0.1,0.05,0.05,0.2),2,2)#
+    for (i in 1:10000) {#
+        beta1[,1:2] = mvrnorm(n = 200, rep(0,2), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+    score_stat=lapply(site.list, function(x)     #score stats for m sites#
+    {#
+        hat.beta = (solve(t(tilde.x) %*% mix_eff_cov[[x]] %*% tilde.x)) %*% (t(tilde.x) %*% mix_eff_cov[[x]] %*%as.matrix(beta1[x]))#
+        s=t(beta1[x]) %*% mix_eff_cov[[x]] %*% beta1$Z - t(hat.beta) %*% t(tilde.x) %*% mix_eff_cov[[x]] %*% beta1$Z#
+    }#
+    )#
+    tmp.res[i,] = as.vector(unlist(score_stat))#
+    }
+cov(tmp.res)
+if(sum(is.na(U)) >0) {#
+        indicator =  !is.na(U)#
+        site.list = site.list[indicator]#
+        mix_eff_cov = mix_eff_cov[indicator]#
+        U = U[indicator]#
+        fianl.indicator = 9#
+    } else {#
+        fianl.indicator = 1#
+    }# delete the NA CpG sits#
+    m=length(site.list)#
+    T=t(U)%*%U                                    #SumSqU test statistic#
+    CovS=matrix(0,m,m)                        #cov of the m score stats#
+    tmp =list()#
+    sigma = list()#
+    tmp.x = list()#
+    for(i in 1:m) {#
+        tmp[[i]] =  beta1$Z %*% mix_eff_cov[[i]] %*% tilde.x %*% (solve(t(tilde.x) %*% mix_eff_cov[[i]] %*% tilde.x))#
+        sigma[[i]] = beta1$Z %*% mix_eff_cov[[i]]#
+        tmp.x[[i]] = t(tilde.x) %*% mix_eff_cov[[i]]#
+    }#
+    for ( i in 1:m)#
+    {#
+        for ( j in 1:i)#
+        {#
+            CovS[i,j]=CovS[j,i]= cov(beta1[site.list[i]],beta1[site.list[j]]) * ( sigma[[i]] %*% t(sigma[[j]]) - tmp[[i]] %*% tmp.x[[i]] %*% t(sigma[[j]]) - tmp[[j]] %*% tmp.x[[j]] %*% t(sigma[[i]]) +  tmp[[i]] %*% tmp.x[[i]] %*% t(tmp.x[[j]]) %*% t(tmp[[j]]) )#
+        }#
+    }
+cov(tmp.res)
+CovS
+CovS/cov(tmp.res)
+##################################
+### Simulation 1              ####
+##################################
+#
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+library(permute)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+res = matrix(NA,1000,2)
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 2# number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+#Y <- t(X %*% matrix(rep(c(0.05,0.1),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")
+beta <- Y#
+    beta = t(beta)#
+    is.X.null = is.null(X)#
+    if( is.X.null) {#
+        beta1 =as.data.frame(beta)#
+        beta1$chip = rep(1:length(C),each = C[1])#
+        beta1$Z = Z#
+    } else {#
+        X = as.data.frame(X)#
+        X$chip = rep(1:length(C),each = C[1])#
+        X$Z = Z#
+        beta1 = as.data.frame(cbind(beta,X))#
+    }#
+    site.list = colnames(beta)#
+    n = dim(Y)[2]#
+    mix_eff_p=lapply(site.list, function(x)     #mixed models#
+    {#
+        if(is.X.null) {#
+            formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+            model =try (do.call("lmer", args = list(formula,data=beta1,na.action="na.exclude")))#
+            res = anova(model)[1,6]#
+        } else {#
+            formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+            model =try (do.call("lmer", args = list(formula,data=beta1,na.action="na.exclude")))#
+            res = anova(model)[1,6]#
+        }#
+        res#
+    }#
+    ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+    pvalue=as.vector(unlist(mix_eff_p))#
+    minp  = min(pvalue)#
+    ## permute y#
+    ###
+    beta2 = beta1
+n.perm = 1000
+n.perm = 100
+beta2 = beta1#
+    minp.dist = sapply (1:n.perm, function(i) {#
+        for(k in 1:dim(Y)[1]) {#
+            tmp = beta1[,k]#
+            plots <- Plots(strata = gl(length(C), C[1]))#
+            CTRL <- how(plots = plots, within = Within(type = "free"))#
+            beta2[,k] = tmp[shuffle(n, CTRL)]#
+        }#
+        mix_eff_p = lapply(site.list, function(x)     #mixed models#
+        {#
+            if(is.X.null) {#
+                formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+                model =try (do.call("lmer", args = list(formula,data=beta2,na.action="na.exclude")))#
+                return(anova(model)[1,6])#
+            } else {#
+                formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+                model =try (do.call("lmer", args = list(formula,data=beta2,na.action="na.exclude")))#
+                res = anova(model)[1,6]#
+            }#
+            res#
+        }#
+        ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+        pvalue=as.vector(unlist(mix_eff_p))#
+        min(pvalue)#
+    })
+for(k in 1:dim(Y)[1]) {#
+            tmp = beta1[,k]#
+            plots <- Plots(strata = gl(length(C), C[1]))#
+            CTRL <- how(plots = plots, within = Within(type = "free"))#
+            beta2[,k] = tmp[shuffle(n, CTRL)]#
+        }
+shuffle(n, CTRL)
+shuffle(n, CTRL)[11]
+shuffle(n, CTRL)[21]
+shuffle(n, CTRL)[31]
+shuffle(n, CTRL)[41]
+n.perm = 1000
+minp.dist = sapply (1:n.perm, function(i) {#
+        for(k in 1:dim(Y)[1]) {#
+            tmp = beta1[,k]#
+            plots <- Plots(strata = gl(length(C), C[1]))#
+            CTRL <- how(plots = plots, within = Within(type = "free"))#
+            beta2[,k] = tmp[shuffle(n, CTRL)]#
+        }#
+        mix_eff_p = lapply(site.list, function(x)     #mixed models#
+        {#
+            if(is.X.null) {#
+                formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+                model =try (do.call("lmer", args = list(formula,data=beta2,na.action="na.exclude")))#
+                return(anova(model)[1,6])#
+            } else {#
+                formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+                model =try (do.call("lmer", args = list(formula,data=beta2,na.action="na.exclude")))#
+                res = anova(model)[1,6]#
+            }#
+            res#
+        }#
+        ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+        pvalue=as.vector(unlist(mix_eff_p))#
+        min(pvalue)#
+    })
+minp.dist
+out = (sum(minp <minp.dist)+1)/n.perm
+out
+minp.dist = sapply (1:n.perm, function(i) {#
+        for(k in 1:dim(Y)[1]) {#
+            tmp = beta1[,k]#
+            plots <- Plots(strata = gl(length(C), C[1]))#
+            CTRL <- how(plots = plots, within = Within(type = "free"))#
+            beta2[,k] = tmp[shuffle(n, CTRL)]#
+        }#
+        mix_eff_p = lapply(site.list, function(x)     #mixed models#
+        {#
+            if(is.X.null) {#
+                formula = as.formula(paste(x,"~(1|chip)+Z", sep=""))#
+                model =try (do.call("lmer", args = list(formula,data=beta2,na.action="na.exclude")))#
+                if (inherits(model, "try-error")) {#
+                    c("NA")#
+                } else {#
+                    return(anova(model)[1,6])#
+                }#
+            } else {#
+                formula = as.formula(paste(x,"~(1|chip)+Z + X1 + X2", sep=""))#
+                model =try (do.call("lmer", args = list(formula,data=beta2,na.action="na.exclude")))#
+                if (inherits(model, "try-error")) {#
+                    c("NA")#
+                } else {#
+                    return(anova(model)[1,6])#
+                }#
+            }#
+        }#
+        ) ## calcluate the Sigma_k in the LMM, we will use it in the future. The main difference between SKAT and this method#
+        min(as.vector(unlist(mix_eff_p)),na.rm = TRUE)#
+    })
+##################################
+#
+library(MASS)#
+library("truncnorm")#
+library(lme4)#
+library(lmerTest)#
+library(permute)#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+res = matrix(NA,1000,2)#
+chip.size = 10#
+#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 2# number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+Y <- t(X %*% matrix(rep(c(0.05,0.2),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error
+minp.dist
+source("SumSqU.R")#
+source("SumSqU2.R")#
+source("minP.R")#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+#
+chip.size = 10#
+# Z is generated from Bin(p)#
+n = 200 # sample size#
+Z = rbinom(n,1,0.4)#
+n.y = 20# number of CpG sites in the gene#
+#
+informative.num = 1#
+beta = c(rep(0,informative.num),rep(0,n.y-informative.num))#
+C = rep(chip.size,n/chip.size)#
+#
+#generate Y; we assume each gene has 20 CpG sites. Note that this is the average of the#
+#
+tmp.norm.ind = runif(n)#
+# generate the other covariates#
+X = cbind(rbinom(n,1,0.6),(tmp.norm.ind<0.3)* rnorm(n,0.2,0.1)+ (tmp.norm.ind>=0.3) * rnorm(n, 0.8,0.1))#
+# generate the sigma matrix: random design matrix + random error matrix#
+sigma = matrix(0,n,n)#
+n.len = n/chip.size#
+sigma.r = 0.0005#
+sigma.e = 0.0005#
+tmp.D.index1 = 1#
+for (i in 1:n.len) {#
+    tmp.D.index2 = tmp.D.index1 + C[i]-1#
+    sigma[tmp.D.index1:tmp.D.index2,tmp.D.index1:tmp.D.index2]= matrix(rep(sigma.e,C[i]*C[i]),C[i],C[i]) + diag(x = sigma.e,C[i],C[i])#
+    tmp.D.index1 = tmp.D.index2 + 1#
+}#
+#
+error = mvrnorm(n = n.y, rep(0,n), sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE)#
+#
+Y <- t(X %*% matrix(rep(c(0.05,0.2),times = n.y),2,n.y) ) + as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#Y <- as.matrix(beta) %*% t(as.matrix(Z)) + error#
+#
+#t(X%*% matrix(rep(c(0.1,0.2),n.y),2,n.y)) +#
+colnames(X) = c("X1","X2")#
+rownames(Y) = paste("Y",c(1:n.y),sep="")#
+#
+SumSqU(Y,X,Z,C)
+10*20
+3*60+15
+500*3*1.5
+500*3*1.5*4
+40*3
+40*3*2
+240/60
+?drop
+#setwd("/Users/chong/Google Drive/homework/research-undergoing/MicrobiomeTest/simulation/sim4")#
+setwd("/panfs/roc/groups/1/panwei/wuxx0845/MicrobiomeTest/simulation/sim4")#
+library(aSPU)#
+library("GUniFrac")#
+library("dirmult")#
+#library("DirichletReg")#
+library("adephylo")#
+library(reshape)#
+library(cluster)#
+library(BiasedUrn)#
+library(CompQuadForm)#
+library(iSKAT)#
+source("generateSNP.R")#
+source("GxE-scoretest-logistic-snpset-v22.R")#
+source("GxE-scoretest-snpset-v12.R")#
+source("iSKAT-Linear-v4.R")#
+source("iSKAT-Logistic-v3.R")#
+source("Main_GESAT.R")#
+source("Main_iSKAT.R")#
+#
+source("iSPU.R")#
+source("iSPU.logistic.R")#
+source("iSPU-support.R")#
+#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+#
+################################################################################
+### Generate the data set  and set the parameters                         ######
+################################################################################
+data.index = job#
+set.seed(data.index)#
+data(throat.otu.tab)#
+data(throat.tree)#
+data(throat.meta)#
+#
+#######################################################
+## The parameters we need specify beforehand       ####
+#######################################################
+nSam = 500  #the number of samples#
+s=2       #the clusters we used as the environment factor#
+nSNP0 = 10 # the number of related SNP#
+nSNP = 5 # the number of unrelated SNP#
+########################################################
+tree <- throat.tree#
+tree.dist <- cophenetic(tree)#
+obj <- pam(as.dist(tree.dist), 20,diss =TRUE)#
+clustering <- obj$clustering#
+#
+tmp.res = matrix(NA,20,1)#
+for(i in 1:20) {#
+    tmp.res[i,] = sum(clustering == i)#
+}#
+#
+otu.ids <- tree$tip.label#
+#
+load("DirMultOutput.RData")#
+p.est = dd$pi#
+names(p.est) <- names(dd$pi)#
+theta <- dd$theta#
+gplus <- (1 - theta) / theta#
+p.est <- p.est[otu.ids]#
+g.est <- p.est * gplus#
+p.clus <- sort(tapply(p.est, clustering, sum), decr=T)#
+scale2 = function(x)as.numeric(scale(x))#
+#
+comm <- matrix(0, nSam, length(g.est))#
+rownames(comm) <- 1:nrow(comm)#
+colnames(comm) <- names(g.est)#
+comm.p <- comm#
+nSeq <- rnbinom(nSam, mu = 1000, size = 25)#
+for (i in 1:nSam) {#
+    comm.p[i, ] <- rdirichlet(1, g.est)[1, ]#
+    comm[i, ] <- rmultinom(1, nSeq[i], prob=comm.p[i, ])[, 1]#
+}#
+#
+otu.ids <- names(which(clustering == s))#
+#
+OTU = comm[, otu.ids]#
+#
+##########################################
+## generate SNP data set              ####
+##########################################
+#
+SNP  = simAR1RareSNP(nSam,nSNP0 = nSNP0,nSNP = nSNP)#
+#
+#########
+y  = SNP[,1:nSNP0] %*% runif(nSNP0,1,1.5)+ scale2(rowSums(OTU)) * 5 + rnorm(nSam,0,0.5)#
+xb = SNP[,1:nSNP0] %*% runif(nSNP0,1,1.5)+ scale2(rowSums(OTU)) * 5#
+#
+y <-  rbinom(nSam, 1, prob=1/(1+exp(-xb)))# For this case, we don't consider#
+Y = as.matrix(y)
+25*24
+22*24
+21*24
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-bioinformatics-7-19/sim3/")#
+library(aSPU)#
+library("GUniFrac")#
+library("dirmult")#
+#library("DirichletReg")#
+#library("adephylo")#
+library(reshape)#
+library(cluster)#
+library(BiasedUrn)#
+library(CompQuadForm)#
+library(MiRKAT)#
+source("GUniFrac.R")#
+source("MiRKAT_binary.R")#
+source("MiRKAT_support.R")#
+source("MiRKAT_continuous.R")#
+source("swak.R")#
+library(Rcpp)#
+#
+library(RcppArmadillo)#
+sourceCpp("swak.cpp")#
+###############################################################################
+### Get the core index, we will use this index as the lambda2 index      ######
+###############################################################################
+args=(commandArgs(TRUE))#
+job = as.numeric(gsub("\\job=", "", args))#
+data.index = job#
+#
+################################################################################
+### Generate the data set  and set the parameters                         ######
+################################################################################
+data.index = job#
+set.seed(data.index)#
+data(throat.otu.tab)#
+data(throat.tree)#
+data(throat.meta)#
+#
+nSam = 100#
+s=34#
+tree <- throat.tree#
+tree.dist <- cophenetic(tree)#
+obj <- pam(as.dist(tree.dist), 40,diss =TRUE)#
+clustering <- obj$clustering#
+otu.ids <- tree$tip.label#
+#
+load("DirMultOutput.RData")#
+p.est = dd$pi#
+names(p.est) <- names(dd$pi)#
+theta <- dd$theta#
+gplus <- (1 - theta) / theta#
+p.est <- p.est[otu.ids]#
+g.est <- p.est * gplus#
+p.clus <- sort(tapply(p.est, clustering, sum), decr=T)#
+scale2 = function(x)as.numeric(scale(x))#
+comm <- matrix(0, nSam, length(g.est))#
+rownames(comm) <- 1:nrow(comm)#
+colnames(comm) <- names(g.est)#
+# comm.p hold the underlying proportions#
+comm.p <- comm#
+nSeq <- rnbinom(nSam, mu = 1000, size = 25)#
+for (i in 1:nSam) {#
+    comm.p[i, ] <- rdirichlet(1, g.est)[1, ]#
+    comm[i, ] <- rmultinom(1, nSeq[i], prob=comm.p[i, ])[, 1]#
+}#
+#
+otu.ids <- names(which(clustering == s))#
+# y <- scale(apply(comm.p[, otu.ids], 1, sum))[, 1] * b * f + rnorm(nSam,mean =0, sd = sqrt(1.5)) # var = 1.5#
+#
+# No additional covariates in this case.#
+OTU = comm[, otu.ids]#
+#
+X   = cbind(runif(nSam)<0.5, rnorm(nSam) + scale2(rowSums(OTU))*0)#
+xb  = scale2(X[,1] + X[,2]) * 0.5 + scale2(rowSums(OTU)) * 0#
+pro=1/(1+exp(-xb))#
+y <-  rbinom(nSam, 1, prob=1/(1+exp(-xb)))# For this case, we don't consider
+Y = y#
+cov = X#
+X = comm#
+tree = throat.tree#
+B = 1000#
+pow=c(0.5,1,1.5,2)#
+out_type = "D"
+n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    if (class(X)!= "matrix") stop("X is not a matrix")#
+    if (nrow(X)!=n) stop("Dimensions of y and X do not match")#
+    m = ncol(X)#
+    if (out_type == "D") {#
+        family = "binomial"#
+        if (is.null(cov)) {#
+            mu    = rep(mean(Y), n)#
+            residual   = Y - mu#
+        } else {#
+            mod = glm(Y~cov, family = family)#
+            mu  = mod$fitted.values#
+            residual = Y - mu#
+        }#
+    } else {#
+        if (is.null(cov)) {#
+            mu    = rep(mean(Y), n)#
+            residual   = Y - mu#
+        } else {#
+            mod  = lm(Y~cov)#
+            mu  = mod$fitted.values#
+            residual = Y - mu#
+        }#
+    }#
+    ##observed statistics#
+    out.i = 1#
+    GuniF.cum = GUniFrac_cum(X,tree)#
+    cum = GuniF.cum$cum#
+    br.len = GuniF.cum$br.len#
+    br.len = as.matrix(br.len)#
+    U = residual %*% t(cum)#
+    U = abs(U)#
+    score.weight = U^0#
+    GUniF = GUniFracCpp(cum,br.len,score.weight)#
+    tmp = GUniFrac(X, tree, alpha = c(0))$unifracs#
+    duw = tmp[, , "d_UW"]#
+    d0 = GUniF$d0#
+    dw = GUniF$d1  # Weighted UniFrac#
+    d5 = GUniF$d5    # GUniFrac with alpha 0.5#
+    dbc = BCdist(cum,t(score.weight))#
+#
+    ## transform the distance matrix to the kernel#
+    duw = D2K(duw)#
+    d0 = D2K(d0)#
+    dw = D2K(dw)#
+    d5 = D2K(d5)#
+    dbc = D2K(dbc)#
+#
+    ks = list(dbc,duw,d0,d5,dw)#
+    output = matrix(NA,9,10)
+cum2 = cum *matrix(rep(br.len,each = dim(cum)[2]),nrow = dim(cum)[1],ncol = dim(cum)[2],byrow = TRUE)
+X = t(cum2)
+model = "binomial"
+pow=c(2:8, Inf)
+n.perm=1000
+userank = T
+model = match.arg(model)#
+#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+#
+#### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+   } else {#
+       tdat1<-data.frame(trait=Y, cov)#
+       fit1<-glm(trait~.,family=model,data=tdat1)#
+       pis<-fitted.values(fit1)#
+       XUs<-matrix(0, nrow=n, ncol=k)#
+       Xmus = X#
+       for(i in 1:k){#
+           tdat2<-data.frame(X1=X[,i], cov)#
+           fit2<-glm(X1~.,data=tdat2)#
+           Xmus[,i]<-fitted.values(fit2)#
+           XUs[, i]<-(X[,i] - Xmus[,i])#
+       }#
+       r<-Y - pis#
+       U<-t(XUs) %*% r#
+   }#
+#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    npow = pow#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) {#
+            Ts[j] = sum(U^pow[j])#
+        } else {#
+            Ts[j] = max(abs(U))#
+            npow[j] = 0#
+        }#
+    }#
+#
+    ## residual permutation#
+#
+    n_pow = length(pow)#
+    nr_XUs = nrow(XUs)#
+    nc_XUs = ncol(XUs)#
+    n_perm = n.perm#
+    n_r = length(r)
+?sample
+U
+dim(XUs)
+dim(t(XUs))
+t(XUs)%*%r0
+t(XUs)%*%r
+dim(r)
+dim(t(XUs))
+r
+setwd("/Users/chong/Google Drive/SWAK/simulation/swak-10-25/sim17")#
+library(aSPU)#
+library("GUniFrac")#
+library("dirmult")#
+#library("DirichletReg")#
+#library("adephylo")#
+library(reshape)#
+library(cluster)#
+library(BiasedUrn)#
+library(CompQuadForm)#
+library(MiRKAT)#
+source("GUniFrac.R")#
+source("MiRKAT_binary.R")#
+source("MiRKAT_support.R")#
+source("MiRKAT_continuous.R")#
+source("swak.R")#
+library(Rcpp)#
+#
+library(RcppArmadillo)#
+sourceCpp("swak.cpp")
+sourceCpp("swak.cpp")
+Y
+X
+dim(X)
+X2 = X
+cov
+model
+model = match.arg(model)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U2^pow[j]) else Ts[j] = max(abs(U2))#
+    }
+Ts = MiSPUC(X,r, X2,r2,as.matrix(pow),n.perm)
+class(r)
+Ts = MiSPUC(X,as.matrix(r), X2,as.matrix(r2),as.matrix(pow),n.perm)
+as.matrix(r)
+sourceCpp("swak.cpp")
+Ts = MiSPUC(X,as.matrix(r), X2,as.matrix(r2),as.matrix(pow),n.perm)
+Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+sourceCpp("swak.cpp")#
+#
+    Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+Ts
+Ts
+as.matrix(pow)
+pow==Inf
+pow[pow==Inf] = 0
+pow
+sourceCpp("swak.cpp")#
+    pow[pow==Inf] = 0#
+    Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+sourceCpp("swak.cpp")#
+    pow[pow==Inf] = 0#
+    Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+Ts
+sourceCpp("swak.cpp")#
+    pow[pow==Inf] = 0#
+    Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+sourceCpp("swak.cpp")#
+    pow[pow==Inf] = 0#
+    Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+sourceCpp("swak.cpp")#
+    pow[pow==Inf] = 0#
+    Ts = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)
+Ts
+Ts = TsC$X1
+TsC = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)#
+    Ts = TsC$X1
+Ts
+T0s
+pPerm0 = rep(NA,length(pow))#
+    T0s = numeric(n.perm)
+T0s
+Ts
+model = match.arg(model)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U2^pow[j]) else Ts[j] = max(abs(U2))#
+    }
+Ts
+Ts = TsC$X1
+round( sum(abs(Ts[1])<=abs(T0s)) / n.perm, digits = 8)
+round( sum(abs(Ts[,1])<=abs(T0s)) / n.perm, digits = 8)
+Ts
+Ts[1]
+j = 1
+round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)
+abs(T0s)
+T0s = TsC$X1
+for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+minp0
+length(pow)
+j = 1
+pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)
+pPerm0
+( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)
+for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+pPerm0
+j = 2
+round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)
+Ts
+model = match.arg(model)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U2^pow[j]) else Ts[j] = max(abs(U2))#
+    }#
+    #########################################
+    pow[pow==Inf] = 0#
+    TsC = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)#
+    ## residual permutation#
+    pPerm0 = rep(NA,length(pow))#
+    T0s = TsC$X1
+for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+pPerm0
+T0s
+Ts
+model = match.arg(model)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts2[j] = sum(U2^pow[j]) else Ts2[j] = max(abs(U2))#
+    }
+#########################################
+    pow[pow==Inf] = 0#
+    TsC = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)#
+    ## residual permutation#
+    pPerm0 = rep(NA,length(pow))#
+    T0s = TsC$X1#
+    for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+pPerm0
+Ts
+Ts
+Ts2
+model = match.arg(model)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts2[j] = sum(U2^pow[j]) else Ts2[j] = max(abs(U2))#
+    }
+Ts
+U2
+max(U2)
+max(abs(U2))
+pow
+model = match.arg(model)#
+     pow=c(2:8, Inf)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts2[j] = sum(U2^pow[j]) else Ts2[j] = max(abs(U2))#
+    }#
+    #########################################
+    pow[pow==Inf] = 0#
+    TsC = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)#
+    ## residual permutation#
+    pPerm0 = rep(NA,length(pow))#
+    T0s = TsC$X1
+Ts
+for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+pPerm0
+n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+#
+#### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+   } else {#
+       tdat1<-data.frame(trait=Y, cov)#
+       fit1<-glm(trait~.,family=model,data=tdat1)#
+       pis<-fitted.values(fit1)#
+       XUs<-matrix(0, nrow=n, ncol=k)#
+       Xmus = X#
+       for(i in 1:k){#
+           tdat2<-data.frame(X1=X[,i], cov)#
+           fit2<-glm(X1~.,data=tdat2)#
+           Xmus[,i]<-fitted.values(fit2)#
+           XUs[, i]<-(X[,i] - Xmus[,i])#
+       }#
+       r<-Y - pis#
+       U<-t(XUs) %*% r#
+   }#
+#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    ## cat("statistic calculated","\n")#
+#
+    ## residual permutation#
+    pPerm0 = rep(NA,length(pow))#
+    T0s = numeric(n.perm)#
+    s <- sample(1:10^5,1)#
+#
+    for (j in 1:length(pow)){#
+        set.seed(s) # to ensure the same samples are drawn for each pow#
+        for (b in 1:n.perm){#
+            r0 <- sample(r, length(r))#
+            U0 <- as.vector(t(XUs) %*% r0)#
+            if (pow[j] < Inf){ T0s[b] = round(sum( U0^pow[j]), digits = 8) }#
+            if (pow[j] == Inf) {T0s[b] = round( max(abs(U0)), digits = 8) }#
+	}#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s)) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+minp0
+P0s
+minp0
+T0s
+T0s = numeric(n.perm)
+T0s
+j = 1
+set.seed(s) # to ensure the same samples are drawn for each pow#
+        for (b in 1:n.perm){#
+            r0 <- sample(r, length(r))#
+            U0 <- as.vector(t(XUs) %*% r0)#
+            if (pow[j] < Inf){ T0s[b] = round(sum( U0^pow[j]), digits = 8) }#
+            if (pow[j] == Inf) {T0s[b] = round( max(abs(U0)), digits = 8) }#
+	}
+T0s
+pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s)) / n.perm, digits = 8)
+pPerm0
+round( sum(abs(Ts[j])<=abs(T0s)) / n.perm, digits = 8)
+n.perm
+rank(abs(T0s))
+P0s = ( (n.perm-rank(abs(T0s))) + 1 )/(n.perm)
+P0s
+pow=c(2:8, Inf)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts2[j] = sum(U2^pow[j]) else Ts2[j] = max(abs(U2))#
+    }#
+    #########################################
+    pow[pow==Inf] = 0#
+    TsC = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)#
+    ## residual permutation#
+    pPerm0 = rep(NA,length(pow))#
+    T0s = TsC$X1#
+    for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }
+minp0
+Paspu<-(sum(minp0<=min(pPerm0))+1)/(n.perm+1)
+Paspu
+pvs <- c(pPerm0, Paspu)
+pvs
+minp0
+c(paste("SPU", pow, sep=""), "aSPU")
+pow=c(2:8, Inf)#
+    n <- length(Y)#
+    if (is.null(X) && length(X)>0) X=as.matrix(X, ncol=1)#
+    k <- ncol(X)#
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        XUs<-Xg <- X#
+        r<-Y-mean(Y)#
+        U<-as.vector(t(Xg) %*% r)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r<-Y - pis#
+        U<-t(X) %*% r#
+    }#
+    ##observed statistics#
+    Ts=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts[j] = sum(U^pow[j]) else Ts[j] = max(abs(U))#
+    }#
+    #########################################
+    #### Score vector:#
+    if (is.null(cov)){#
+        ## NO nuisance parameters:#
+        r2<-Y-mean(Y)#
+        U<-as.vector(t(X2) %*% r2)#
+    } else {#
+        tdat1<-data.frame(trait=Y, cov)#
+        fit1<-glm(trait~.,family=model,data=tdat1)#
+        pis<-fitted.values(fit1)#
+        r2<-Y - pis#
+        U2<-t(X2) %*% r#
+    }#
+    ##observed statistics#
+    Ts2=rep(NA,length(pow))#
+    for (j in 1:length(pow)){#
+        if (pow[j]<Inf) Ts2[j] = sum(U2^pow[j]) else Ts2[j] = max(abs(U2))#
+    }#
+    #########################################
+    pow[pow==Inf] = 0 # pass 0 as infitiy#
+    TsC = MiSPUC(t(X),as.matrix(r), t(X2),as.matrix(r2),as.matrix(pow),n.perm)#
+    ## residual permutation#
+    pPerm0 = rep(NA,length(pow))#
+    T0s = TsC$X1#
+    for (j in 1:length(pow)){#
+#
+        pPerm0[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }#
+    #    cat("P0s caculated","\n")#
+    Paspu<-(sum(minp0<=min(pPerm0))+1)/(n.perm+1)#
+    pvs <- c(pPerm0, Paspu)#
+    Ts <- c(Ts, min(pPerm0))#
+    Unweighted = list(Ts = Ts, pvs = pvs)#
+#
+    #################################
+    pPerm02 = rep(NA,length(pow))#
+#
+    T02s = TsC$X2#
+    for (j in 1:length(pow)){#
+        pPerm02[j] = round( sum(abs(Ts2[j])<=abs(T02s[,j])) / n.perm, digits = 8)#
+        P0s = ( (n.perm-rank(abs(T02s[,j]))) + 1 )/(n.perm)#
+        if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+    }#
+    #    cat("P0s caculated","\n")#
+    Paspu2<-(sum(minp0<=min(pPerm02))+1)/(n.perm+1)#
+    pvs2 <- c(pPerm0, Paspu)#
+    Ts2 <- c(Ts2, min(pPerm02))#
+    pow[pow==0] = Inf#
+    names(Ts2) <- c(paste("SPU", pow, sep=""), "aSPU")#
+    names(pvs2) = names(Ts2)#
+    Weighted = list(Ts = Ts2, pvs = pvs2)#
+    ####################################
+    pPerm03 = rep(NA,length(pow))#
+    T02s = TsC$X2#
+    for (j in 1:(2*length(pow))){#
+        if(j <= length(pow)) {#
+            pPerm03[j] = round( sum(abs(Ts[j])<=abs(T0s[,j])) / n.perm, digits = 8)#
+            P0s = ( (n.perm-rank(abs(T0s[,j]))) + 1 )/(n.perm)#
+            if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+        } else {#
+            j1 = j - length(pow)#
+            pPerm03[j] = round( sum(abs(Ts2[j1])<=abs(T02s[,j1])) / n.perm, digits = 8)#
+            P0s = ( (n.perm-rank(abs(T02s[,j1]))) + 1 )/(n.perm)#
+            if (j==1) minp0=P0s else minp0[which(minp0>P0s)]=P0s[which(minp0>P0s)]#
+        }#
+    }#
+    Paspu3<-(sum(minp0<=min(pPerm03))+1)/(n.perm+1)#
+    Final = list(Ts =min(pPerm03) ,pvalue =Paspu3 )#
+    list(Unweighted = Unweighted,Weighted = Weighted,Final= Final)
+res= list(Unweighted = Unweighted,Weighted = Weighted,Final= Final)
+res$Final$pvalue

@@ -1,0 +1,58 @@
+##########################################################
+s = 12, number of cluster 20, Y is binary, 6.7% OTUs are informative
+sim1: X and Z are independent, adjust covariate
+sim2: X and Z are independent, No adjust covariate
+sim3: X and Z are correlated, Adjust covariate
+sim4: X and Z are correlated, No adjust covariate
+
+##########################################################
+s = 12, number of cluster 20, Y is continuous, 6.7% OTUs are informative
+sim5: X and Z are independent, adjust covariate
+sim6: X and Z are independent, No adjust covariate
+sim7: X and Z are correlated, Adjust covariate
+sim8: X and Z are correlated, No adjust covariate
+
+##########################################################
+s = 34, number of cluster 40, Y is binary; 3 or 5 OTUs are informative (I forget)
+sim9: X and Z are independent, adjust covariate
+sim10: X and Z are correlated, Adjust covariate
+
+##########################################################
+s = 14, number of cluster 20, Y is binary, 16.6% OTUs are informative
+sim11: X and Z are independent, adjust covariate
+sim12: X and Z are correlated, Adjust covariate
+
+##########################################################
+s = 8, number of cluster 20, Y is binary, 9.9% OTUs are informative
+sim13: X and Z are independent, adjust covariate
+sim14: X and Z are correlated, Adjust covariate
+
+##########################################################
+s = 8, number of cluster 20, Y is binary, 1.5% OTU are informative
+sim15: X and Z are independent, adjust covariate
+sim16: X and Z are correlated, Adjust covariate  #need do it again
+
+##########################################################
+s = 8, number of cluster 10, Y is binary, 24.8% OTU are informative
+sim17: X and Z are independent, adjust covariate
+sim18: X and Z are correlated, Adjust covariate
+
+##########################################################
+Randomly pick 50 OTUs
+sim19: X and Z are independent, adjust covariate
+sim20: X and Z are correlated, Adjust covariate
+
+##########################################################
+Type 1 error, alpha = 0.01
+sim21: X and Z are independent, adjust covariate
+sim22: X and Z are independent, No adjust covariate
+sim23: X and Z are correlated, Adjust covariate
+sim24: X and Z are correlated, No adjust covariate
+
+
+
+
+
+
+
+
